@@ -10,6 +10,8 @@ const observationUrl =
 
 const homepageUrl = "https://chitchi1216.github.io/HomePage-ike.maniken/";
 
+const legacyHomepageUrl = "https://ikelab-site-cf.pages.dev/member/";
+
 const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const privateResources = [
@@ -212,6 +214,20 @@ export default async function PortalPage() {
             ))}
           </div>
         </section>
+
+        <footer className="border-t border-[#d8d0bf] py-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a8172]">
+            Archive
+          </p>
+          <a
+            className="mt-3 inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
+            href={legacyHomepageUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            旧IKELABページ
+          </a>
+        </footer>
       </div>
     </main>
   );
