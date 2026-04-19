@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "IKELAB 2026",
-  description: "Small experiments for ideas, tools, and learning.",
+  title: "IKELAB Portal",
+  description: "IKELAB research circle member portal.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

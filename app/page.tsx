@@ -1,106 +1,156 @@
 import Image from "next/image";
-import Link from "next/link";
 
-const activities = [
-  "Creative technology",
-  "Learning experiments",
-  "Digital prototypes",
+const portalItems = [
+  {
+    label: "Observation",
+    detail: "旅先や日常で出会った生物の記録",
+  },
+  {
+    label: "Discussion",
+    detail: "研究テーマごとの議論と仮説メモ",
+  },
+  {
+    label: "Materials",
+    detail: "教材、資料、スライド、PDFの蓄積",
+  },
+  {
+    label: "Notes",
+    detail: "活動記録、調査ログ、共有ノート",
+  },
 ];
+
+const loginUrl =
+  "https://nature-observer-sage.vercel.app/login?callbackUrl=https%3A%2F%2Fnature-observer-sage.vercel.app%2F";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#f7f6f1] text-[#151515]">
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 sm:px-8">
-        <Link className="flex items-center gap-3" href="/" aria-label="IKELAB home">
-          <Image
-            src="/ikelab-icon.png"
-            alt=""
-            width={34}
-            height={34}
-            priority
-          />
-          <span className="text-sm font-semibold tracking-[0.18em]">IKELAB</span>
-        </Link>
-        <nav className="hidden items-center gap-8 text-sm text-[#5f5f57] sm:flex">
-          <a className="transition hover:text-[#151515]" href="#about">
-            About
-          </a>
-          <a className="transition hover:text-[#151515]" href="#work">
-            Work
-          </a>
-          <a className="transition hover:text-[#151515]" href="mailto:hello@ikelab2026.com">
-            Contact
-          </a>
-        </nav>
-      </header>
-
-      <section className="mx-auto grid min-h-[calc(100vh-88px)] w-full max-w-6xl content-center gap-14 px-6 pb-20 pt-10 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-        <div className="space-y-10">
+    <main className="min-h-screen bg-[#f6f3ea] text-[#171713]">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-6 sm:px-8">
+        <header className="flex items-center justify-between">
           <Image
             src="/ikelab-wordmark.png"
             alt="IKELAB 2026"
-            width={720}
-            height={214}
-            className="h-auto w-full max-w-[620px]"
+            width={260}
+            height={77}
+            className="h-auto w-36 sm:w-48"
             priority
           />
-          <div className="max-w-2xl space-y-6">
-            <p className="text-3xl font-medium leading-tight tracking-normal sm:text-5xl">
-              Small experiments for ideas, tools, and learning.
-            </p>
-            <p className="max-w-xl text-base leading-8 text-[#5f5f57] sm:text-lg">
-              IKELAB is a minimal studio site for publishing prototypes,
-              research notes, and project updates from 2026 onward.
+          <span className="border border-[#d9d1c2] bg-[#fffdf8] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#676052]">
+            Member Access
+          </span>
+        </header>
+
+        <section className="grid flex-1 items-center gap-12 py-14 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="max-w-xl space-y-8">
+            <div className="inline-flex items-center gap-3 border border-[#d9d1c2] bg-[#fffdf8] px-4 py-3">
+              <Image
+                src="/ikelab-icon.png"
+                alt=""
+                width={30}
+                height={30}
+                priority
+              />
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#676052]">
+                Research Circle Portal
+              </span>
+            </div>
+
+            <div className="space-y-5">
+              <h1 className="text-4xl font-semibold leading-tight tracking-normal sm:text-6xl">
+                IKELAB Portal
+              </h1>
+              <p className="max-w-lg text-base leading-8 text-[#5f594d] sm:text-lg">
+                IKELABは、会社から生まれた研究サークルです。観察記録、
+                議論、教材、テーマ別ノートを集約し、メンバーだけで
+                小さな研究を進めていきます。
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-sm text-[#5f594d]">
+              <div className="border-l border-[#c8beaa] pl-4">
+                Current members
+                <p className="mt-1 text-2xl font-semibold text-[#171713]">5</p>
+              </div>
+              <div className="border-l border-[#c8beaa] pl-4">
+                Primary archive
+                <p className="mt-1 text-2xl font-semibold text-[#171713]">
+                  Nature
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mx-auto w-full max-w-md border border-[#d8d0bf] bg-[#fffdf8] p-6 shadow-[12px_12px_0_#e4dece] sm:p-8">
+            <div className="mb-8 flex items-start justify-between gap-6">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#777063]">
+                  Sign in
+                </p>
+                <h2 className="mt-3 text-2xl font-semibold">
+                  メンバー専用入口
+                </h2>
+              </div>
+              <Image
+                src="/ikelab-icon.png"
+                alt=""
+                width={48}
+                height={48}
+              />
+            </div>
+
+            <form action={loginUrl} className="space-y-5">
+              <label className="block">
+                <span className="text-sm font-medium text-[#4d473d]">
+                  Email
+                </span>
+                <input
+                  className="mt-2 h-12 w-full border border-[#d8d0bf] bg-[#f8f5ed] px-4 text-base outline-none transition focus:border-[#171713] focus:bg-white"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="member@ikelab2026.com"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-medium text-[#4d473d]">
+                  Password
+                </span>
+                <input
+                  className="mt-2 h-12 w-full border border-[#d8d0bf] bg-[#f8f5ed] px-4 text-base outline-none transition focus:border-[#171713] focus:bg-white"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="Password"
+                />
+              </label>
+
+              <button
+                className="h-12 w-full bg-[#171713] px-5 text-sm font-semibold uppercase tracking-[0.18em] text-[#fffdf8] transition hover:bg-[#3a352d]"
+                type="submit"
+              >
+                Login
+              </button>
+            </form>
+
+            <p className="mt-5 text-xs leading-6 text-[#7c7568]">
+              現在は観察記録システムのログイン画面へ接続します。議論と教材の
+              管理機能はポータル機能として順次追加予定です。
             </p>
           </div>
-        </div>
+        </section>
 
-        <div className="flex justify-center lg:justify-end">
-          <div className="relative aspect-square w-full max-w-[360px] border border-[#d8d4ca] bg-[#efede5] p-10">
-            <Image
-              src="/ikelab-icon.png"
-              alt="IKELAB icon"
-              width={420}
-              height={420}
-              className="h-full w-full object-contain"
-              priority
-            />
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="about"
-        className="border-y border-[#ddd9cf] bg-[#fffdf8] px-6 py-16 sm:px-8"
-      >
-        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.8fr_1.2fr]">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#777166]">
-            About
-          </p>
-          <p className="max-w-3xl text-2xl leading-snug text-[#24241f] sm:text-3xl">
-            We keep the surface quiet so the work can speak clearly: concise
-            writing, useful prototypes, and a steady record of what is being
-            explored.
-          </p>
-        </div>
-      </section>
-
-      <section id="work" className="px-6 py-16 sm:px-8">
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-          {activities.map((activity) => (
-            <div
-              key={activity}
-              className="border border-[#d8d4ca] bg-[#fffdf8] p-6"
-            >
-              <p className="text-lg font-medium">{activity}</p>
-              <p className="mt-4 text-sm leading-7 text-[#666057]">
-                Coming soon. This space will collect simple updates and
-                lightweight project notes.
+        <section className="grid gap-3 border-t border-[#d8d0bf] py-6 md:grid-cols-4">
+          {portalItems.map((item) => (
+            <div key={item.label} className="bg-[#fffdf8] p-4">
+              <p className="text-sm font-semibold">{item.label}</p>
+              <p className="mt-2 text-xs leading-6 text-[#6f685c]">
+                {item.detail}
               </p>
             </div>
           ))}
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
