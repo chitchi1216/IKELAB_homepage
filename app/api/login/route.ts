@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME, getSessionToken } from "../../../lib/auth";
 
+function getSiteUrl(request: NextRequest) {
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") ?? "https";
+
+  if (forwardedHost) {
+    return `${forwardedProto}://${forwardedHost}`;
+  }
+
+  return process.env.IKELAB_SITE_URL ?? "https://ikelab2026.com";
+}
+
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const password = formData.get("password");
@@ -13,10 +24,13 @@ export async function POST(request: NextRequest) {
     typeof password !== "string" ||
     password !== expectedPassword
   ) {
-    return NextResponse.redirect(new URL("/?error=1", request.url), 303);
+    return NextResponse.redirect(new URL("/?error=1", getSiteUrl(request)), 303);
   }
 
-  const response = NextResponse.redirect(new URL("/portal", request.url), 303);
+  const response = NextResponse.redirect(
+    new URL("/portal", getSiteUrl(request)),
+    303,
+  );
   response.cookies.set({
     name: SESSION_COOKIE_NAME,
     value: sessionToken,
@@ -29,4 +43,3 @@ export async function POST(request: NextRequest) {
 
   return response;
 }
-
