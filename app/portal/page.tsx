@@ -14,6 +14,8 @@ const legacyHomepageUrl = "https://ikelab-site-cf.pages.dev/member/";
 
 const existenceDialogueUrl = "/archive/existence-dialogue-revised";
 
+const terraHubV14Url = "/external/terra-hub-v1-4";
+
 const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const privateResources = [
@@ -58,6 +60,13 @@ const externalPages = [
     detail: "外部公開ページ",
     href: homepageUrl,
     action: "ページを開く",
+  },
+  {
+    label: "ExternalPage",
+    title: "社内実験用データ統合基盤構想 v1.4",
+    detail: "分散する業務データをCSV起点で統合・可視化する社内実験基盤の企画案",
+    href: terraHubV14Url,
+    action: "企画書を開く",
   },
 ];
 
