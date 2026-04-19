@@ -27,6 +27,16 @@ const privateResources = [
   },
 ];
 
+const externalPages = [
+  {
+    label: "ExternalPage",
+    title: "資源と人を未来につなぐためのデータマッシュアップ構想",
+    detail: "外部公開ページ",
+    href: homepageUrl,
+    action: "ページを開く",
+  },
+];
+
 export default async function PortalPage() {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -72,23 +82,6 @@ export default async function PortalPage() {
               <h1 className="text-4xl font-semibold leading-tight tracking-normal sm:text-6xl">
                 IKELAB2026 Portal
               </h1>
-              <a
-                className="group block max-w-lg border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
-                href={homepageUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
-                  External Page
-                </p>
-                <p className="mt-3 break-all text-base font-semibold leading-7 text-[#171713]">
-                  {homepageUrl}
-                </p>
-                <p className="mt-4 text-sm font-semibold text-[#171713]">
-                  開く
-                  <span className="ml-2 transition group-hover:ml-3">→</span>
-                </p>
-              </a>
             </div>
           </div>
 
@@ -159,6 +152,40 @@ export default async function PortalPage() {
                 </p>
                 <p className="mt-5 text-sm font-semibold text-[#171713]">
                   {resource.action}
+                  <span className="ml-2 transition group-hover:ml-3">→</span>
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-[#d8d0bf] py-6">
+          <div className="mb-4">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
+              ExternalPage
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {externalPages.map((page) => (
+              <a
+                key={page.title}
+                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
+                href={page.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
+                  {page.label}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold leading-8">
+                  {page.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[#6f685c]">
+                  {page.detail}
+                </p>
+                <p className="mt-5 text-sm font-semibold text-[#171713]">
+                  {page.action}
                   <span className="ml-2 transition group-hover:ml-3">→</span>
                 </p>
               </a>
