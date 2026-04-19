@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { SESSION_COOKIE_NAME, isValidSession } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -14,12 +14,12 @@ const archivePath = path.join(
   "index.html",
 );
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
   if (!isValidSession(session)) {
-    return NextResponse.redirect(new URL("/", request.url), 307);
+    return NextResponse.redirect("https://ikelab2026.com/", 307);
   }
 
   const html = await readFile(archivePath, "utf8");
