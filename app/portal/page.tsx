@@ -12,6 +12,8 @@ const homepageUrl = "https://chitchi1216.github.io/HomePage-ike.maniken/";
 
 const legacyHomepageUrl = "https://ikelab-site-cf.pages.dev/member/";
 
+const existenceDialogueUrl = "/archive/existence-dialogue-revised";
+
 const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const privateResources = [
@@ -219,14 +221,22 @@ export default async function PortalPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a8172]">
             Archive
           </p>
-          <a
-            className="mt-3 inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
-            href={legacyHomepageUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            旧IKELABページ
-          </a>
+          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+            <a
+              className="inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
+              href={legacyHomepageUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              旧IKELABページ
+            </a>
+            <a
+              className="inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
+              href={existenceDialogueUrl}
+            >
+              実在と実存の架橋は時間を超えた対話 改訂版
+            </a>
+          </div>
         </footer>
       </div>
     </main>
