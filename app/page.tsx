@@ -43,19 +43,6 @@ export default function Home() {
             <form action="/api/login" className="space-y-5" method="post">
               <label className="block">
                 <span className="text-sm font-medium text-[#4d473d]">
-                  Email
-                </span>
-                <input
-                  className="mt-2 h-12 w-full border border-[#d8d0bf] bg-[#f8f5ed] px-4 text-base outline-none transition focus:border-[#171713] focus:bg-white"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="member@ikelab2026.com"
-                />
-              </label>
-
-              <label className="block">
-                <span className="text-sm font-medium text-[#4d473d]">
                   Password
                 </span>
                 <input
