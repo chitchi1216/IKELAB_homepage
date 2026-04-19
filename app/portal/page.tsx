@@ -8,6 +8,8 @@ export const dynamic = "force-dynamic";
 const observationUrl =
   "https://nature-observer-sage.vercel.app/login?callbackUrl=https%3A%2F%2Fnature-observer-sage.vercel.app%2F";
 
+const homepageUrl = "https://chitchi1216.github.io/HomePage-ike.maniken/";
+
 const privateResources = [
   {
     label: "Material",
@@ -70,11 +72,23 @@ export default async function PortalPage() {
               <h1 className="text-4xl font-semibold leading-tight tracking-normal sm:text-6xl">
                 IKELAB2026 Portal
               </h1>
-              <p className="max-w-lg text-base leading-8 text-[#5f594d] sm:text-lg">
-                IKELABは、会社から生まれた研究サークルです。観察記録、
-                議論、教材、テーマ別ノートを集約し、メンバーだけで
-                小さな研究を進めていきます。
-              </p>
+              <a
+                className="group block max-w-lg border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
+                href={homepageUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
+                  External Page
+                </p>
+                <p className="mt-3 break-all text-base font-semibold leading-7 text-[#171713]">
+                  {homepageUrl}
+                </p>
+                <p className="mt-4 text-sm font-semibold text-[#171713]">
+                  開く
+                  <span className="ml-2 transition group-hover:ml-3">→</span>
+                </p>
+              </a>
             </div>
           </div>
 
