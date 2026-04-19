@@ -10,13 +10,13 @@ const observationUrl =
 
 const homepageUrl = "https://chitchi1216.github.io/HomePage-ike.maniken/";
 
-const frameworkOverviewUrl = "/integrated-framework-3domains-10layers.html";
+const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const privateResources = [
   {
-    label: "Material Page",
-    title: "3圏10層モデル ダッシュボード",
-    detail: "教材の内容をサイト上で確認できる説明ページ",
+    label: "Material v21",
+    title: "教材 v21を読む",
+    detail: "docxから生成した図入りHTMLをポータル上で閲覧",
     href: frameworkOverviewUrl,
     action: "教材ページを開く",
     external: false,
