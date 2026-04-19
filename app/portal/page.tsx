@@ -5,25 +5,6 @@ import { SESSION_COOKIE_NAME, isValidSession } from "../../lib/auth";
 
 export const dynamic = "force-dynamic";
 
-const portalItems = [
-  {
-    label: "Observation",
-    detail: "旅先や日常で出会った生物の記録",
-  },
-  {
-    label: "Discussion",
-    detail: "研究テーマごとの議論と仮説メモ",
-  },
-  {
-    label: "Materials",
-    detail: "教材、資料、スライド、PDFの蓄積",
-  },
-  {
-    label: "Notes",
-    detail: "活動記録、調査ログ、共有ノート",
-  },
-];
-
 const observationUrl =
   "https://nature-observer-sage.vercel.app/login?callbackUrl=https%3A%2F%2Fnature-observer-sage.vercel.app%2F";
 
@@ -56,14 +37,23 @@ export default async function PortalPage() {
     <main className="min-h-screen bg-[#f6f3ea] text-[#171713]">
       <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-6 sm:px-8">
         <header className="flex items-center justify-between">
-          <Image
-            src="/ikelab-wordmark.png"
-            alt="IKELAB 2026"
-            width={260}
-            height={77}
-            className="h-auto w-36 sm:w-48"
-            priority
-          />
+          <div className="flex items-center gap-3">
+            <Image
+              src="/ikelab-icon.png"
+              alt=""
+              width={34}
+              height={34}
+              priority
+            />
+            <Image
+              src="/ikelab-wordmark.png"
+              alt="IKELAB 2026"
+              width={260}
+              height={77}
+              className="h-auto w-36 sm:w-48"
+              priority
+            />
+          </div>
           <form action="/api/logout" method="post">
             <button
               className="border border-[#d9d1c2] bg-[#fffdf8] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#676052] transition hover:border-[#171713]"
@@ -76,41 +66,15 @@ export default async function PortalPage() {
 
         <section className="grid flex-1 items-center gap-12 py-14 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="max-w-xl space-y-8">
-            <div className="inline-flex items-center gap-3 border border-[#d9d1c2] bg-[#fffdf8] px-4 py-3">
-              <Image
-                src="/ikelab-icon.png"
-                alt=""
-                width={30}
-                height={30}
-                priority
-              />
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#676052]">
-                Research Circle Portal
-              </span>
-            </div>
-
             <div className="space-y-5">
               <h1 className="text-4xl font-semibold leading-tight tracking-normal sm:text-6xl">
-                IKELAB Portal
+                IKELAB2026 Portal
               </h1>
               <p className="max-w-lg text-base leading-8 text-[#5f594d] sm:text-lg">
                 IKELABは、会社から生まれた研究サークルです。観察記録、
                 議論、教材、テーマ別ノートを集約し、メンバーだけで
                 小さな研究を進めていきます。
               </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-sm text-[#5f594d]">
-              <div className="border-l border-[#c8beaa] pl-4">
-                Current members
-                <p className="mt-1 text-2xl font-semibold text-[#171713]">5</p>
-              </div>
-              <div className="border-l border-[#c8beaa] pl-4">
-                Primary archive
-                <p className="mt-1 text-2xl font-semibold text-[#171713]">
-                  Nature
-                </p>
-              </div>
             </div>
           </div>
 
@@ -187,19 +151,7 @@ export default async function PortalPage() {
             ))}
           </div>
         </section>
-
-        <section className="grid gap-3 border-t border-[#d8d0bf] py-6 md:grid-cols-4">
-          {portalItems.map((item) => (
-            <div key={item.label} className="bg-[#fffdf8] p-4">
-              <p className="text-sm font-semibold">{item.label}</p>
-              <p className="mt-2 text-xs leading-6 text-[#6f685c]">
-                {item.detail}
-              </p>
-            </div>
-          ))}
-        </section>
       </div>
     </main>
   );
 }
-
