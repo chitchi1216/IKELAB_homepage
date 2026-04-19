@@ -10,13 +10,24 @@ const observationUrl =
 
 const homepageUrl = "https://chitchi1216.github.io/HomePage-ike.maniken/";
 
+const frameworkOverviewUrl = "/integrated-framework-3domains-10layers.html";
+
 const privateResources = [
+  {
+    label: "Material Page",
+    title: "3圏10層モデル ダッシュボード",
+    detail: "教材の内容をサイト上で確認できる説明ページ",
+    href: frameworkOverviewUrl,
+    action: "教材ページを開く",
+    external: false,
+  },
   {
     label: "Material",
     title: "Integrated Framework",
     detail: "3 Domains / 10 Layers の教材リポジトリ",
     href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers",
     action: "GitHubで開く",
+    external: true,
   },
   {
     label: "Discussion",
@@ -24,6 +35,7 @@ const privateResources = [
     detail: "教材に関する質問、論点、改善案を議論",
     href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers/discussions",
     action: "議論を開く",
+    external: true,
   },
 ];
 
@@ -138,8 +150,8 @@ export default async function PortalPage() {
                 key={resource.title}
                 className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
                 href={resource.href}
-                target="_blank"
-                rel="noreferrer"
+                target={resource.external ? "_blank" : undefined}
+                rel={resource.external ? "noreferrer" : undefined}
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
                   {resource.label}

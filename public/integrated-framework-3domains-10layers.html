@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3圏10層モデル ダッシュボード | IKELAB教材</title>
+<style>
+  :root {
+    --ink: #18212f;
+    --ink-soft: #5d697b;
+    --paper: #f5f0e8;
+    --panel: rgba(255, 255, 255, 0.76);
+    --panel-strong: rgba(255, 255, 255, 0.92);
+    --line: rgba(24, 33, 47, 0.12);
+    --line-strong: rgba(24, 33, 47, 0.24);
+    --nav-bg: #111b2d;
+    --nav-soft: #22314a;
+    --human: #2f6fed;
+    --human-soft: rgba(47, 111, 237, 0.12);
+    --bio: #2f8757;
+    --bio-soft: rgba(47, 135, 87, 0.12);
+    --earth: #b76d1c;
+    --earth-soft: rgba(183, 109, 28, 0.13);
+    --space: #15808e;
+    --space-soft: rgba(21, 128, 142, 0.12);
+    --alert: #c44d36;
+    --alert-soft: rgba(196, 77, 54, 0.12);
+    --shadow-lg: 0 24px 60px rgba(24, 33, 47, 0.12);
+    --shadow-md: 0 14px 28px rgba(24, 33, 47, 0.08);
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family: "BIZ UDPGothic", "Yu Gothic UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(47, 111, 237, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(47, 135, 87, 0.12), transparent 24%),
+      linear-gradient(180deg, #faf7f2 0%, var(--paper) 100%);
+  }
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-family: "BIZ UDPMincho", "Yu Mincho", serif;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+  }
+  p { margin: 0; line-height: 1.8; color: var(--ink-soft); }
+  button, input { font: inherit; }
+  .shell { display: grid; grid-template-columns: 268px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 24px 18px;
+    background: radial-gradient(circle at top, rgba(47, 111, 237, 0.16), transparent 20%), linear-gradient(180deg, rgba(17, 27, 45, 0.98), rgba(24, 37, 59, 0.98));
+    color: #ebf2fa; border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .brand { padding: 10px 12px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  .brand small { display: block; font-size: 12px; color: rgba(235, 242, 250, 0.72); letter-spacing: 0.08em; text-transform: uppercase; }
+  .brand h1 { font-size: 24px; margin-top: 8px; color: #ffffff; }
+  .brand p { margin-top: 12px; font-size: 12px; color: rgba(235, 242, 250, 0.72); }
+  .nav-group { margin-top: 18px; }
+  .nav-label { margin: 0 12px 8px; font-size: 11px; color: rgba(235, 242, 250, 0.42); letter-spacing: 0.12em; text-transform: uppercase; }
+  .nav-item {
+    display: flex; gap: 10px; align-items: center; width: 100%; padding: 11px 12px; border: 0; border-radius: 12px;
+    background: transparent; color: rgba(235, 242, 250, 0.84); cursor: pointer; text-align: left;
+    transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+  }
+  .nav-item:hover, .nav-item:focus-visible { outline: none; background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+  .nav-item.active { background: linear-gradient(90deg, rgba(47, 111, 237, 0.26), rgba(47, 111, 237, 0.05)); color: #ffffff; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 999px; flex: 0 0 auto; }
+  .content { min-width: 0; padding: 28px; }
+  .topbar { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
+  .topbar h2 { font-size: 38px; color: var(--ink); }
+  .topbar p { margin-top: 10px; max-width: 820px; }
+  .meta-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .pill { padding: 8px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; backdrop-filter: blur(12px); }
+  .section { display: none; }
+  .section.active { display: block; }
+  .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr); gap: 18px; margin-bottom: 18px; }
+  .card, .hero-panel {
+    position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg); backdrop-filter: blur(14px);
+  }
+  .hero-panel { padding: 28px; }
+  .hero-panel::after {
+    content: ""; position: absolute; right: -42px; bottom: -62px; width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(47, 111, 237, 0.14), transparent 68%); pointer-events: none;
+  }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: rgba(24, 33, 47, 0.06); color: var(--ink-soft); font-size: 12px; margin-bottom: 14px; }
+  .hero-panel h3 { font-size: 31px; max-width: 14em; }
+  .hero-panel p { margin-top: 14px; max-width: 60ch; }
+  .hero-actions, .chip-row, .tag-row, .strategy-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mode-chip, .filter-chip {
+    padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.72);
+    color: var(--ink-soft); cursor: pointer; transition: 0.18s ease;
+  }
+  .mode-chip:hover, .filter-chip:hover, .mode-chip:focus-visible, .filter-chip:focus-visible { outline: none; border-color: var(--line-strong); color: var(--ink); }
+  .mode-chip.active, .filter-chip.active { background: var(--ink); border-color: var(--ink); color: #ffffff; }
+  .signal-board { display: grid; gap: 12px; }
+  .signal-card { background: var(--panel-strong); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-md); }
+  .signal-card strong { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+  .signal-card .value { font-size: 30px; font-weight: 700; line-height: 1.1; color: var(--ink); }
+  .signal-card small { display: block; margin-top: 7px; line-height: 1.65; color: var(--ink-soft); }
+  .grid-4, .grid-3, .grid-2, .note-grid, .path-grid, .driver-grid, .strategy-grid, .message-grid, .question-grid, .layer-grid, .heat-grid, .steps, .flow {
+    display: grid; gap: 16px;
+  }
+  .grid-4, .heat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grid-3, .note-grid, .strategy-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .path-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .driver-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .message-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .question-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .steps { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .card { padding: 22px; margin-bottom: 16px; }
+  .card-title { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
+  .card-title h3 { font-size: 22px; }
+  .card-title span { font-size: 12px; color: var(--ink-soft); }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid transparent; font-size: 12px;
+  }
+  .tag.human { background: var(--human-soft); color: var(--human); border-color: rgba(47, 111, 237, 0.18); }
+  .tag.bio { background: var(--bio-soft); color: var(--bio); border-color: rgba(47, 135, 87, 0.18); }
+  .tag.earth { background: var(--earth-soft); color: var(--earth); border-color: rgba(183, 109, 28, 0.18); }
+  .tag.space { background: var(--space-soft); color: var(--space); border-color: rgba(21, 128, 142, 0.18); }
+  .tag.alert { background: var(--alert-soft); color: var(--alert); border-color: rgba(196, 77, 54, 0.18); }
+  .note-card, .mini-card, .heat-card, .driver-card, .message-card, .question-card, .path-card, .layer-card, .strategy-card, .step-card {
+    border: 1px solid var(--line); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.8); padding: 16px;
+  }
+  .note-card h4, .mini-card h4, .heat-card h4, .driver-card h4, .message-card h4, .question-card h4, .path-card h4, .layer-card h4, .strategy-card h4, .step-card h4, .flow-card h4 {
+    font-size: 16px; margin-bottom: 8px;
+  }
+  .note-card p, .mini-card p, .heat-card p, .driver-card p, .message-card p, .question-card p, .path-card p, .layer-card p, .strategy-card p, .step-card p, .flow-card p {
+    font-size: 13px;
+  }
+  .cite {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgba(24, 33, 47, 0.08);
+    color: var(--ink-soft);
+    font-size: 11px;
+    vertical-align: baseline;
+    text-decoration: none;
+  }
+  .source-links {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .source-link {
+    display: block;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--human);
+    text-decoration: none;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+  .source-link:hover,
+  .source-link:focus-visible {
+    outline: none;
+    border-color: rgba(47, 111, 237, 0.28);
+    background: rgba(47, 111, 237, 0.06);
+  }
+  .path-card .step, .strategy-card .number { font-size: 28px; font-weight: 700; color: rgba(24, 33, 47, 0.2); line-height: 1; }
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 18px; }
+  .rings-wrap { display: grid; gap: 14px; }
+  .rings { position: relative; width: min(360px, 100%); aspect-ratio: 1; margin: 0 auto; }
+  .ring {
+    position: absolute; inset: 50%; transform: translate(-50%, -50%); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    text-align: center; line-height: 1.6; font-weight: 700; padding: 18px;
+  }
+  .ring.earth { width: 100%; height: 100%; border: 2px solid rgba(183, 109, 28, 0.56); background: radial-gradient(circle, rgba(183, 109, 28, 0.14), rgba(183, 109, 28, 0.04)); color: var(--earth); }
+  .ring.bio { width: 72%; height: 72%; border: 2px solid rgba(47, 135, 87, 0.56); background: radial-gradient(circle, rgba(47, 135, 87, 0.14), rgba(47, 135, 87, 0.04)); color: var(--bio); }
+  .ring.human { width: 42%; height: 42%; border: 2px solid rgba(47, 111, 237, 0.56); background: radial-gradient(circle, rgba(47, 111, 237, 0.16), rgba(47, 111, 237, 0.04)); color: var(--human); }
+  .callout { padding: 16px 18px; border-left: 4px solid var(--alert); border-radius: 0 var(--radius-md) var(--radius-md) 0; background: linear-gradient(90deg, rgba(196, 77, 54, 0.12), rgba(196, 77, 54, 0.04)); }
+  .callout strong { display: block; margin-bottom: 6px; font-size: 14px; color: var(--ink); }
+  .layer-card.hidden, .strategy-card.hidden, .mode-panel { display: none; }
+  .mode-panel.active, .section.active { display: block; }
+  .layer-head { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .layer-index { font-size: 23px; font-weight: 700; line-height: 1; }
+  .layer-card ul, .bullet-list, .strategy-list, .timeline-item ul, .details-body ul {
+    margin: 8px 0 0; padding-left: 18px; color: var(--ink-soft);
+  }
+  .layer-card li, .bullet-list li, .strategy-list li, .timeline-item li, .details-body li { font-size: 13px; line-height: 1.68; margin-bottom: 6px; }
+  .compare-table, .dense-table { width: 100%; border-collapse: collapse; }
+  .compare-table th, .compare-table td, .dense-table th, .dense-table td {
+    padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; font-size: 13px; line-height: 1.65;
+  }
+  .compare-table th, .dense-table th { font-weight: 700; color: var(--ink-soft); background: rgba(24, 33, 47, 0.04); }
+  .timeline { display: grid; gap: 12px; }
+  .timeline-item {
+    padding: 16px 16px 16px 18px; border-left: 4px solid var(--earth); border-radius: 0 var(--radius-md) var(--radius-md) 0; background: rgba(255, 255, 255, 0.78);
+    border-top: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .timeline-item h4 { font-size: 17px; margin-bottom: 8px; }
+  .accordion { display: grid; gap: 10px; }
+  details { border: 1px solid var(--line); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.8); overflow: hidden; }
+  summary { list-style: none; cursor: pointer; padding: 15px 18px; font-weight: 700; color: var(--ink); position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--ink-soft); font-size: 20px; }
+  details[open] summary::after { content: "−"; }
+  .details-body { padding: 0 18px 18px; border-top: 1px solid var(--line); }
+  .flow-card {
+    position: relative; padding: 18px; border-radius: var(--radius-lg); border: 1px solid var(--line); background: rgba(255, 255, 255, 0.78);
+  }
+  .flow-card::after { content: "→"; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--ink-soft); }
+  .flow-card:last-child::after { display: none; }
+  .strategy-meta { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-soft); line-height: 1.65; }
+  .step-card strong { display: block; font-size: 24px; line-height: 1; color: var(--human); }
+  .quote-panel {
+    border-radius: var(--radius-xl); padding: 26px; background: radial-gradient(circle at top right, rgba(125, 211, 252, 0.18), transparent 26%), linear-gradient(135deg, rgba(17, 27, 45, 0.98), rgba(19, 89, 102, 0.96));
+    color: #eef6fb; box-shadow: var(--shadow-lg);
+  }
+  .quote-panel strong { display: block; margin-bottom: 10px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .quote-panel p { color: rgba(238, 246, 251, 0.92); font-size: 15px; }
+  .footer-note { margin-top: 12px; text-align: right; color: var(--ink-soft); font-size: 12px; }
+  @media (max-width: 1240px) {
+    .shell, .hero, .split { grid-template-columns: 1fr; }
+    .grid-4, .grid-3, .grid-2, .note-grid, .path-grid, .driver-grid, .strategy-grid, .message-grid, .question-grid, .layer-grid, .heat-grid, .steps, .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .content { padding: 18px; }
+    .topbar { flex-direction: column; }
+    .grid-4, .grid-3, .grid-2, .note-grid, .path-grid, .driver-grid, .strategy-grid, .message-grid, .question-grid, .layer-grid, .heat-grid, .steps, .flow { grid-template-columns: 1fr; }
+    .flow-card::after { display: none; }
+    .meta-pills { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <small>IKELAB Learning Material</small>
+      <h1>廃棄物処理業界の<br>3圏10層モデル</h1>
+      <p>出典: integrated_3domains_10layers_complete_v21.md<br>設計参照: .claude/claude_dashboard_skill.md</p>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" data-target="overview"><span class="nav-dot" style="background: var(--space);"></span><span>全体像と読み方</span></button>
+      <button class="nav-item" data-target="model"><span class="nav-dot" style="background: var(--human);"></span><span>3圏10層マップ</span></button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Chapters</div>
+      <button class="nav-item" data-target="chapter0"><span class="nav-dot" style="background: var(--earth);"></span><span>第0章 地球史と廃棄物</span></button>
+      <button class="nav-item" data-target="chapter1"><span class="nav-dot" style="background: var(--bio);"></span><span>第1章 生物圏</span></button>
+      <button class="nav-item" data-target="chapter2"><span class="nav-dot" style="background: var(--human);"></span><span>第2章 人間圏7層</span></button>
+      <button class="nav-item" data-target="chapter3"><span class="nav-dot" style="background: var(--alert);"></span><span>第3章 パラドックス</span></button>
+      <button class="nav-item" data-target="chapter4"><span class="nav-dot" style="background: var(--space);"></span><span>第4章 戦略アプローチ</span></button>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Closing</div>
+      <button class="nav-item" data-target="conclusion"><span class="nav-dot" style="background: var(--ink-soft);"></span><span>まとめと実践</span></button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="topbar">
+      <div>
+        <h2>構造を読み、仮説を立て、循環を設計する</h2>
+        <p>長文教材を「何を把握し、何を判断し、どこへ介入するか」に再構成したダッシュボードです。操作は最小限に抑えつつ、層・章・戦略を切り替えながら、現場判断につながる情報を先に見せる構成にしています。</p>
+      </div>
+      <div class="meta-pills">
+        <span class="pill">提示型ダッシュボード</span>
+        <span class="pill">更新基準: 2026年3月29日</span>
+        <span class="pill">版: Ver.2.1</span>
+      </div>
+    </div>
+
+    <section id="overview" class="section active">
+      <div class="hero">
+        <div class="hero-panel">
+          <span class="eyebrow">Why / What / So What</span>
+          <h3>「適正処理」だけでは見落とす構造を、3圏10層で再配置する。</h3>
+          <p>この教材の核は、廃棄物処理を人間圏の制度だけで閉じず、生物圏と地球圏まで含めて再配置することです。焼却、埋立、流出のどの出口を取っても、物質は最終的に外側の圏へ移るため、内側だけの最適化では十分ではありません。</p>
+          <div class="hero-actions">
+            <button class="mode-chip active" data-mode="structure">構造モード</button>
+            <button class="mode-chip" data-mode="time">時間モード</button>
+            <button class="mode-chip" data-mode="strategy">戦略モード</button>
+          </div>
+        </div>
+        <div class="signal-board">
+          <div class="signal-card"><strong>モデルの核</strong><div class="value">3圏 / 10層</div><small>人間圏7層に、生物圏・地球システム層・宇宙圏層を加えた統合フレーム。</small></div>
+          <div class="signal-card"><strong>戦略の出口</strong><div class="value">7アプローチ</div><small>コスト概念から投資概念への転換を支える戦略パッケージ。</small></div>
+          <div class="signal-card"><strong>思考の型</strong><div class="value">5ステップ</div><small>現象観察から検証計画までを循環させる仮説構築プロセス。</small></div>
+        </div>
+      </div>
+
+      <div class="mode-panel active" data-mode-panel="structure">
+        <div class="note-grid">
+          <div class="note-card"><h4>現場の違和感を構造化する</h4><p>「法令遵守しているのに、これでよいのか」という感覚はノイズではなく、枠組みの射程と物質の移動範囲が一致していないことへの感知です。</p></div>
+          <div class="note-card"><h4>既存枠組みを相対化する</h4><p>ISO14001、SDGs、ESG、サーキュラーエコノミー、プラネタリーバウンダリーは有効ですが、人間圏の外にまで視点を広げる補助線が必要です。</p></div>
+          <div class="note-card"><h4>個人と制度を接続する</h4><p>最も内側の個人の判断と、最も外側の物質循環は、廃棄物処理という仕事の中で日常的に接続しています。</p></div>
+        </div>
+      </div>
+
+      <div class="mode-panel" data-mode-panel="time">
+        <div class="note-grid">
+          <div class="note-card"><h4>認知の時間</h4><p>数秒から数年。人間は答えを早く出すよう進化しており、保留し続けることに負荷を感じます。</p></div>
+          <div class="note-card"><h4>制度の時間</h4><p>四半期から数十年。法改正、投資回収、事業計画はこの範囲で動きます。</p></div>
+          <div class="note-card"><h4>物質の時間</h4><p>数百年から数億年。プラスチック分解、化石燃料、地球循環は人間の判断より桁違いに長い時計で動きます。</p></div>
+        </div>
+      </div>
+
+      <div class="mode-panel" data-mode-panel="strategy">
+        <div class="note-grid">
+          <div class="note-card"><h4>答えを固定しない</h4><p>教材は一つの正解を提示せず、構造分析に徹して仮説と検証の循環を続けることを勧めます。</p></div>
+          <div class="note-card"><h4>違和感を捨てない</h4><p>違和感は構造的矛盾を知覚するセンサーであり、戦略思考の出発点です。</p></div>
+          <div class="note-card"><h4>戦略は接続先の選択</h4><p>技術、金融、社会、国際のどこに自社を接続するかが、第4章の戦略判断になります。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>読む順番</h3><span>全体像 → 原因理解 → 介入判断</span></div>
+        <div class="path-grid">
+          <div class="path-card"><div class="step">1</div><h4>全体像を掴む</h4><p>3圏10層の入れ子構造と、7層だけでは足りない理由を確認する。</p></div>
+          <div class="path-card"><div class="step">2</div><h4>原因を読む</h4><p>地球史、生物圏、人間圏7層の順で、問題を駆動する要因を分解する。</p></div>
+          <div class="path-card"><div class="step">3</div><h4>矛盾を特定する</h4><p>規制強化の自己強化ループと、時間スケールの不整合を確認する。</p></div>
+          <div class="path-card"><div class="step">4</div><h4>戦略へ接続する</h4><p>7つのアプローチと投資概念化で、どこに介入できるかを判断する。</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><h3>既存枠組みとの違い</h3><span>どこまで見えて、どこが抜けるか</span></div>
+        <table class="compare-table">
+          <thead><tr><th>枠組み</th><th>主な射程</th><th>3圏10層が補う欠落</th></tr></thead>
+          <tbody>
+            <tr><td>ISO14001</td><td>管理の仕組みと継続改善</td><td>何のために管理するのかという根本問いが弱い。</td></tr>
+            <tr><td>SDGs / CSR / ESG</td><td>社会課題の可視化、責任整理、投資評価</td><td>地球圏→生物圏→人間圏の階層優先順位と長期時間軸が薄い。</td></tr>
+            <tr><td>サーキュラーエコノミー</td><td>経済的に成立する資源循環の設計</td><td>地球の物質循環と経済循環の論理差を補う。</td></tr>
+            <tr><td>プラネタリーバウンダリー</td><td>地球システムの閾値の定量化</td><td>なぜ閾値を超えるのかという人間圏の駆動構造を補う。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>序章の4仮説</h3><span>この教材をどう使うか</span></div>
+        <div class="grid-2">
+          <div class="mini-card"><h4>仮説1 スケールの架橋</h4><p>根本課題は、認知・制度・物質の時間スケールの不整合をどう橋渡しするかにある。</p></div>
+          <div class="mini-card"><h4>仮説2 枠組みの重層的使用</h4><p>既存枠組みは射程が限られるが、全体構造の中に置き直すと有効性が高まる。</p></div>
+          <div class="mini-card"><h4>仮説3 違和感の価値</h4><p>現場の「しっくりこない」は構造的矛盾を検知するセンサーとして機能する。</p></div>
+          <div class="mini-card"><h4>仮説4 思考の循環</h4><p>最終解はなく、問い → 仮説 → 検証 → 新たな問いの循環自体が誠実な向き合い方である。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="model" class="section">
+      <div class="card">
+        <div class="card-title"><h3>3圏10層マップ</h3><span>外側ほど時間スケールが長く、変化は遅いが不可逆性が高い</span></div>
+        <div class="split">
+          <div class="rings-wrap">
+            <div class="rings" aria-hidden="true">
+              <div class="ring earth">地球圏・宇宙圏<br>数千年〜数十億年</div>
+              <div class="ring bio">生物圏<br>数十年〜数百年</div>
+              <div class="ring human">人間圏<br>四半期〜数十年</div>
+            </div>
+            <div class="callout"><strong>設計原理</strong><p>廃棄物は内側から外側へ移動します。内側の制度や市場で「処理した」ものでも、生物圏・地球圏での振る舞いは残ります。</p></div>
+          </div>
+
+          <div>
+            <div class="chip-row" style="margin-bottom: 14px;">
+              <button class="filter-chip active" data-layer-filter="all">全層</button>
+              <button class="filter-chip" data-layer-filter="human">人間圏</button>
+              <button class="filter-chip" data-layer-filter="bio">生物圏</button>
+              <button class="filter-chip" data-layer-filter="earth">地球圏</button>
+            </div>
+
+            <div class="layer-grid">
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">①</div><span class="tag human">人間圏</span></div><h4>法規制層</h4><p>廃棄物処理法、許可制度、罰則、環境基本法。ルール製造工場として業界の形を決める層。</p><ul><li>入力: 社会的要請、政治判断、国際条約</li><li>出力: 法令、基準、許可制度、罰則</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">②</div><span class="tag human">人間圏</span></div><h4>業界構造層</h4><p>許可制度が形作る処理能力、地域分布、競争構造、人的資源、設備状態。</p><ul><li>入力: 許可制度、基準、罰則</li><li>出力: 業者配置、供給パターン、残余容量</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">③</div><span class="tag human">人間圏</span></div><h4>市場層</h4><p>価格形成、情報の非対称性、契約条件、レピュテーションリスク。実際の取引の場。</p><ul><li>入力: 処理能力の配置、需要</li><li>出力: 価格、需要、法改正要望</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">④</div><span class="tag human">人間圏</span></div><h4>技術層</h4><p>AI選別、IoTトレーサビリティ、電子マニフェスト、ケミカルリサイクルなど。</p><ul><li>作用原理: 能力変化</li><li>代表効果: 情報非対称性の緩和</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">⑤</div><span class="tag human">人間圏</span></div><h4>社会文化層</h4><p>環境意識、NIMBY、「3K」イメージ、人材供給。需要と受容性の方向を決める層。</p><ul><li>作用原理: 価値観変化</li><li>代表効果: 施設受容性、人材確保</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">⑥</div><span class="tag human">人間圏</span></div><h4>国際層</h4><p>バーゼル条約、ISSB、EU CSRD、CE政策。国内制度へ上から作用する外圧。<a class="cite" href="#source-9">[9]</a></p><ul><li>作用原理: 外圧</li><li>代表効果: 開示義務、規制調和</li></ul></article>
+              <article class="layer-card" data-domain="human"><div class="layer-head"><div class="layer-index" style="color: var(--human);">⑦</div><span class="tag human">人間圏</span></div><h4>金融資本層</h4><p>ESG投資、グリーンファイナンス、カーボンプライシング。市場行動を下から変える圧力。<a class="cite" href="#source-6">[6]</a></p><ul><li>作用原理: 経済的圧力</li><li>代表効果: 資金調達条件の変化</li></ul></article>
+              <article class="layer-card" data-domain="bio"><div class="layer-head"><div class="layer-index" style="color: var(--bio);">⑧</div><span class="tag bio">生物圏</span></div><h4>生物圏層</h4><p>海洋・陸上・土壌生物、生態系サービス、生物濃縮、ESB。声なき利害関係者の領域。<a class="cite" href="#source-12">[12]</a></p><ul><li>視点: 食物連鎖、長期蓄積</li><li>代表装置: 環境試料タイムカプセル</li></ul></article>
+              <article class="layer-card" data-domain="earth"><div class="layer-head"><div class="layer-index" style="color: var(--earth);">⑨</div><span class="tag earth">地球圏</span></div><h4>地球システム層</h4><p>炭素・窒素・水・リン循環、Deep Time、地震、火山、豪雨。通常業務の外側の制約。</p><ul><li>視点: 速度の不均衡</li><li>代表論点: 災害廃棄物、富栄養化</li></ul></article>
+              <article class="layer-card" data-domain="earth"><div class="layer-head"><div class="layer-index" style="color: var(--space);">⑩</div><span class="tag space">宇宙圏</span></div><h4>宇宙圏層</h4><p>閉鎖系としての地球、宇宙デブリ、宇宙船地球号の思想。最外層の前提条件と展望。</p><ul><li>視点: 捨てる場所がない世界</li><li>代表論点: 完全循環技術の理想形</li></ul></article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="mini-card"><h4>7層モデルとの違い</h4><p>7層モデルは「人間社会の中でどう処理するか」を問う。3圏10層モデルは「地球全体の循環の中でどの選択肢があるか」を問います。</p></div>
+        <div class="mini-card"><h4>外側ほど長い時計</h4><p>人間圏は四半期から数十年、生物圏は数十年から数百年、地球圏は数千年から数十億年で動きます。</p></div>
+        <div class="mini-card"><h4>目標の進化</h4><p>「適正処理」から「地球の循環への復帰」へ。第4章の戦略転換はこの目標の再設定から出発します。</p></div>
+      </div>
+    </section>
+
+    <section id="chapter0" class="section">
+      <div class="card">
+        <div class="card-title"><h3>第0章 地球史から見た「廃棄物」の意味</h3><span>核心: 自然界に「廃棄物」は存在しない</span></div>
+        <div class="split">
+          <div class="timeline">
+            <div class="timeline-item"><h4>農耕革命 | 約1万年前</h4><p>定住と集中により、排出物が一箇所にたまり、自然の分解能力を局所的に超え始めました。</p><ul><li>遊動から定住へ</li><li>人口密度増加と排出集中</li><li>初期のゴミ捨て場の成立</li></ul></div>
+            <div class="timeline-item"><h4>産業革命 | 約250年前</h4><p>地下に固定されていた石炭や鉄を地表に逆流させ、大量生産・大量廃棄の直線型モデルを成立させました。</p><ul><li>化石燃料利用</li><li>都市化と公衆衛生危機</li><li>公共制度としての廃棄物処理の成立</li></ul></div>
+            <div class="timeline-item"><h4>石油化学革命 | 約100年前</h4><p>自然界に存在しない物質を大量合成し、分解者が追いつけない構造を人間が作りました。</p><ul><li>プラスチックの大量生産</li><li>PFASのような「永遠の化学物質」</li><li>核廃棄物という地質学的時間スケールの廃棄物</li></ul></div>
+          </div>
+
+          <div class="accordion">
+            <details open><summary>速度の不均衡</summary><div class="details-body"><p>廃棄物問題の本質は、人間が物質を生成・加工・排出する速度が、自然が分解・循環させる速度を圧倒的に上回ったことです。</p></div></details>
+            <details><summary>Deep Time の視点</summary><div class="details-body"><p>化石燃料は数億年前の微生物や植物由来の蓄積であり、人間はそれをわずか200年で地表に戻しています。地球史の時間感覚では「一瞬の逆流」です。<a class="cite" href="#source-3">[3]</a><a class="cite" href="#source-4">[4]</a></p><ul><li>地球46億年を1年に圧縮すると、産業革命は12月31日23時59分58秒</li><li>1950年以降のプラスチック累計生産量は83億トン超と推計</li><li>合成高分子に微生物進化が追いついていない</li></ul></div></details>
+            <details><summary>4つの主要循環</summary><div class="details-body"><ul><li>炭素循環: 焼却は数億年分の炭素固定を早送りする。</li><li>窒素循環: 人為的窒素固定は自然循環の限界を超えつつある。</li><li>水循環: 排水は熱と水質の両方に影響する。</li><li>リン循環: 気体形態がなく、海底に沈むと長期に戻らない。</li></ul></div></details>
+            <details><summary>ハーバー・ボッシュ法の示唆</summary><div class="details-body"><p>一つの技術革新が、人間圏・生物圏・地球圏に同時波及する典型例です。</p><ul><li>技術層: 工業的窒素固定が農業・化学産業を変えた</li><li>市場層: 食料の大量生産・大量廃棄を加速</li><li>法規制・国際層: 排水基準や国際上限議論へ接続</li><li>生物圏・地球圏: 富栄養化とN2O排出へ波及</li></ul></div></details>
+            <details><summary>災害は通常想定の外側</summary><div class="details-body"><p>地震、火山、豪雨、海面上昇は、人間の法制度や通常の処理能力を一瞬で無効化します。<a class="cite" href="#source-13">[13]</a><a class="cite" href="#source-14">[14]</a></p><ul><li>東日本大震災: 約2,000万トンの災害廃棄物</li><li>熊本地震: 約300万トン</li><li>令和元年東日本台風: 約70万トン</li></ul></div></details>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card"><h4>7層では足りない理由</h4><p>7層は人間圏の内部で閉じていますが、焼却すれば大気に、埋立すれば土壌に、流出すれば海洋へ移動する物質の最終行先が含まれていません。</p></div>
+        <div class="mini-card"><h4>第0章の到達点</h4><p>廃棄物の本質は速度の不均衡であり、目標は「適正処理」から「地球の循環への復帰」へ進化する、という前提がここで確立されます。</p></div>
+      </div>
+    </section>
+
+    <section id="chapter1" class="section">
+      <div class="card">
+        <div class="card-title"><h3>第1章 生物圏 ─ 声なき利害関係者</h3><span>「適正処理」の意味を他の生物の側から見直す</span></div>
+        <div class="grid-3">
+          <div class="note-card"><h4>視点の転換</h4><p>プラスチック袋は人間にとって不要物でも、ウミガメにとっては致死的な罠です。意味は視点によって変わります。</p></div>
+          <div class="note-card"><h4>生態系サービス</h4><p>湿地、土壌微生物、森林は「無料の廃棄物処理」を担いますが、その容量を超えると問題が顕在化します。</p></div>
+          <div class="note-card"><h4>ESB の意義</h4><p>未来の分析技術で過去の汚染を再検証できるよう、環境試料を超低温保存する仕組みです。<a class="cite" href="#source-12">[12]</a></p></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><h3>生物別の影響</h3><span>海から土壌微生物まで</span></div>
+          <div class="accordion">
+            <details open><summary>海洋生物</summary><div class="details-body"><ul><li>マイクロプラスチックがプランクトンから魚、人間まで侵入</li><li>海鳥種の約99%が2050年までにプラスチック摂取と予測された研究 <a class="cite" href="#source-1">[1]</a></li><li>サンゴにプラスチックが付着すると病気リスクが大幅増 <a class="cite" href="#source-2">[2]</a></li><li>ゴーストフィッシングが継続的に被害を生む</li></ul></div></details>
+            <details><summary>陸上生物</summary><div class="details-body"><ul><li>鳥類は巣材への混入や誤食の影響を受ける</li><li>哺乳類は食品廃棄物に誘引され、人獣共通感染症や農業被害に波及</li><li>土壌生物はマイクロプラスチックで活動量が落ちる</li></ul></div></details>
+            <details><summary>微生物</summary><div class="details-body"><ul><li>自然界の分解者は有機物に強いが、合成高分子への対応は遅い</li><li>最終処分場では嫌気性分解がメタン排出につながる</li><li>重金属を毒性の高い形に変える場合もある</li></ul></div></details>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h3>生物濃縮とESB</h3><span>「処理した」はずの物質が戻る</span></div>
+          <table class="dense-table">
+            <thead><tr><th>物質</th><th>濃縮の経路</th><th>人間への影響</th></tr></thead>
+            <tbody>
+              <tr><td>水銀</td><td>微生物 → プランクトン → 魚類</td><td>神経障害</td></tr>
+              <tr><td>PCB</td><td>底泥 → 底生生物 → 魚類 → 鳥類</td><td>内分泌攪乱・発がん性</td></tr>
+              <tr><td>ダイオキシン</td><td>土壌 → 牧草 → 牛 → 乳製品</td><td>免疫低下など</td></tr>
+              <tr><td>PFOS / PFOA</td><td>水系 → 二枚貝 → 魚類 → 人間</td><td>肝機能障害・免疫低下</td></tr>
+              <tr><td>マイクロプラスチック</td><td>海水 → プランクトン → 魚介類</td><td>定量評価は研究途上 <a class="cite" href="#source-7">[7]</a></td></tr>
+            </tbody>
+          </table>
+          <div class="callout" style="margin-top: 14px;"><strong>ESB が示すこと</strong><p>人間が「規制した」と判断した後も、物質は環境中に長く残り続ける。PFOS はその典型です。<a class="cite" href="#source-8">[8]</a><a class="cite" href="#source-12">[12]</a></p></div>
+        </div>
+      </div>
+
+      <div class="heat-grid">
+        <div class="heat-card"><h4>従来KPI</h4><p>処理量、コスト効率、安全性。</p></div>
+        <div class="heat-card"><h4>追加すべき視点</h4><p>自然の循環に戻せた量、生態系の処理容量、生物多様性影響。</p></div>
+        <div class="heat-card"><h4>時間の証拠</h4><p>ESB は50〜100年単位で汚染トレンドを再検証できる。</p></div>
+        <div class="heat-card"><h4>章の結論</h4><p>人間の廃棄物は、他の生物にとって環境の変容として現れる。</p></div>
+      </div>
+    </section>
+
+    <section id="chapter2" class="section">
+      <div class="card">
+        <div class="card-title"><h3>第2章 人間圏 ─ 7層構造の全体像</h3><span>入力 → 出力 → フィードバックで読む</span></div>
+        <div class="flow">
+          <div class="flow-card"><h4>① 法規制層</h4><p>社会問題、政治判断、国際条約を法令、基準、許可制度に変換する。</p></div>
+          <div class="flow-card"><h4>② 業界構造層</h4><p>許可制度の出力を受け、処理能力、地域分布、競争構造を形成する。</p></div>
+          <div class="flow-card"><h4>③ 市場層</h4><p>需要、価格、品質、リスク構造を生み、法改正要望として上流へ返す。</p></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><h3>法規制層の詳細</h3><span>ルール製造工場</span></div>
+          <div class="accordion">
+            <details open><summary>環境法令の体系</summary><div class="details-body"><ul><li>環境基本法: 環境保全の上位理念と生物多様性の接点</li><li>循環型社会形成推進基本法: 発生抑制 → 再使用 → 再生利用 → 熱回収 → 適正処分</li><li>廃棄物処理法: 産廃20品目、許可制度、マニフェスト、排出事業者責任</li><li>個別リサイクル法6法: 品目特性ごとの制度設計</li></ul></div></details>
+            <details><summary>関連法令11法</summary><div class="details-body"><p>民法、刑法、独禁法、行政手続法、労安法、道交法、消防法、建築基準法、地方自治法、大防法、土壌汚染対策法などが日常業務を規定します。</p></div></details>
+            <details><summary>構造的緊張</summary><div class="details-body"><p>法律は「適正処分」を優先順位の最下位に置きます。つまり、業界のコア業務が法的には最も望ましい選択肢ではないという緊張があります。</p></div></details>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h3>業界構造層と市場層</h3><span>供給制約と情報非対称性</span></div>
+          <div class="accordion">
+            <details open><summary>業界構造層の出力</summary><div class="details-body"><ul><li>地域閉鎖性: 都道府県単位許可で市場が分断される</li><li>寡占化傾向: 高い参入障壁で価格競争が弱まる</li><li>供給非弾力性: 新設に5〜10年、NIMBYで供給が増えにくい</li><li>人的資源不足と設備老朽化が継続的圧力になる</li></ul></div></details>
+            <details><summary>市場層の課題</summary><div class="details-body"><ul><li>定価がなく、相見積もりでも比較が難しい</li><li>処理後の実態が見えず、モラルハザードが起きやすい</li><li>ESG対応がコスト扱いされやすく、部門間で評価軸がずれる</li><li>委託先の不適正処理は排出者のブランド毀損に直結する</li></ul></div></details>
+            <details><summary>市場層の「出力」</summary><div class="details-body"><ul><li>適正処理の実現</li><li>リサイクル品・再生原料</li><li>エネルギー回収</li><li>環境負荷、データ、雇用</li></ul></div></details>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>外部4層の作用原理</h3><span>内側の3層をどう動かすか</span></div>
+        <div class="driver-grid">
+          <div class="driver-card"><h4>④ 技術層</h4><p>能力変化。電子マニフェスト、GPS、AI選別、IoTセンサーで情報要因に効く。<a class="cite" href="#source-11">[11]</a></p></div>
+          <div class="driver-card"><h4>⑤ 社会文化層</h4><p>価値観変化。NIMBY、人材イメージ、環境意識の高まりが供給と需要を左右する。</p></div>
+          <div class="driver-card"><h4>⑥ 国際層</h4><p>外圧。バーゼル条約、ISSB、EU CSRD が情報・構造・インセンティブに同時作用する。<a class="cite" href="#source-6">[6]</a><a class="cite" href="#source-9">[9]</a></p></div>
+          <div class="driver-card"><h4>⑦ 金融資本層</h4><p>経済的圧力。ESG投融資やカーボンプライシングが短期コスト認識を変える。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="chapter3" class="section">
+      <div class="card">
+        <div class="card-title"><h3>第3章 パラドックスの再定義</h3><span>規制強化が不適切処理を誘発する自己強化ループ</span></div>
+        <div class="callout"><strong>中心的パラドックス</strong><p>規制を強化するほど処理コストが上がり、その結果として不法投棄や不適切処理のインセンティブが高まり、さらに規制強化を招く。</p></div>
+      </div>
+
+      <div class="heat-grid">
+        <div class="heat-card"><h4>構造要因</h4><p>許可の硬直性、地域閉鎖性、供給非弾力性。</p></div>
+        <div class="heat-card"><h4>情報要因</h4><p>価格不透明、情報非対称性、モラルハザード。</p></div>
+        <div class="heat-card"><h4>インセンティブ要因</h4><p>外部不経済の未内部化、コストセンター思考、短期バイアス。</p></div>
+        <div class="heat-card"><h4>第4要因</h4><p>時間スケールの不整合。人間の短い時計が、長い時計の世界に不可逆な結果を残す。</p></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><h3>許可制度の二面性</h3><span>盾であり歪みの源泉でもある</span></div>
+          <div class="accordion">
+            <details open><summary>適正化への寄与</summary><div class="details-body"><ul><li>品質フィルタリング</li><li>処理水準の担保</li><li>トレーサビリティ</li><li>責任の明確化</li></ul></div></details>
+            <details><summary>構造的歪み</summary><div class="details-body"><ul><li>寡占化と競争制限</li><li>供給不足の地域偏在</li><li>不法投棄の誘発</li><li>イノベーション停滞</li></ul></div></details>
+            <details><summary>核心</summary><div class="details-body"><p>構造要因だけを緩和しても、情報要因とインセンティブ要因が残る限り、自己強化ループは止まりません。</p></div></details>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h3>拡張パラドックス</h3><span>生物圏・地球圏を入れる</span></div>
+          <div class="accordion">
+            <details open><summary>① 「適正処理」でも生態系負荷は残る</summary><div class="details-body"><p>規制基準以下でも、マイクロプラスチックやPFOSのような物質は長期蓄積し得ます。<a class="cite" href="#source-8">[8]</a><a class="cite" href="#source-12">[12]</a></p></div></details>
+            <details><summary>② 生物濃縮で人間へ還流する</summary><div class="details-body"><p>海へ出た物質は食物連鎖を通じて濃縮され、魚介類として人間の食卓へ戻ります。</p></div></details>
+            <details><summary>③ 大規模災害は7層の想定外</summary><div class="details-body"><p>地震、津波、火山噴火は制度設計が前提とする通常状態を一瞬で崩します。</p></div></details>
+            <details><summary>④ 時間スケールの不整合</summary><div class="details-body"><p>企業意思決定は四半期から数年、生態系応答は数十年から数百年、地球循環は数千年から数百万年で動きます。</p></div></details>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>仮説構築の5ステップ</h3><span>問い続けるための作業手順</span></div>
+        <div class="steps">
+          <div class="step-card"><strong>1</strong><h4>現象観察</h4><p>業務やニュースから「なぜ」を拾う。</p></div>
+          <div class="step-card"><strong>2</strong><h4>10層配置</h4><p>どの層の出来事かを特定する。</p></div>
+          <div class="step-card"><strong>3</strong><h4>連関分析</h4><p>他層・他圏との接続を追う。</p></div>
+          <div class="step-card"><strong>4</strong><h4>仮説構築</h4><p>構造に基づき対応策を組み立てる。</p></div>
+          <div class="step-card"><strong>5</strong><h4>検証計画</h4><p>結論ではなく次の問いへ戻る検証を設計する。</p></div>
+        </div>
+        <div class="callout" style="margin-top: 14px;"><strong>ケーススタディ</strong><p>海岸清掃で自社由来と思われるプラスチック片を発見した場合、市場層、業界構造層、生物圏層、金融資本層を横断して評価し、施設補修投資をTNFD対応とリスク回避として正当化できるかを検証する。<a class="cite" href="#source-6">[6]</a></p></div>
+      </div>
+    </section>
+
+    <section id="chapter4" class="section">
+      <div class="card">
+        <div class="card-title"><h3>第4章 戦略的アプローチの拡張</h3><span>コストから投資へ、処理から循環復帰へ</span></div>
+        <div class="grid-3">
+          <div class="mini-card"><h4>第1段階</h4><p>廃棄物を安全に消去する。価格競争にさらされるコスト最小化の対象。</p></div>
+          <div class="mini-card"><h4>第2段階</h4><p>排出者の企業価値向上を売る。投資の対象として翻訳する。</p></div>
+          <div class="mini-card"><h4>第3段階</h4><p>地球の循環への復帰に貢献する。社会的使命として位置づける。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>7つの戦略アプローチ</h3><span>フィルタで原因別に切り替え</span></div>
+        <div class="strategy-filter">
+          <button class="filter-chip active" data-strategy-filter="all">全て</button>
+          <button class="filter-chip" data-strategy-filter="information">情報</button>
+          <button class="filter-chip" data-strategy-filter="structure">構造</button>
+          <button class="filter-chip" data-strategy-filter="incentive">インセンティブ</button>
+          <button class="filter-chip" data-strategy-filter="time">時間スケール</button>
+        </div>
+        <div class="strategy-grid">
+          <div class="strategy-card" data-causes="information incentive"><div class="number">①</div><h4>ESGインフラ化 + TNFD対応</h4><p>処理データだけでなく、生物多様性や自然資本への影響を定量化し、開示支援に変える。<a class="cite" href="#source-6">[6]</a></p><div class="strategy-meta">リターン: ESG評価向上、資金調達コスト低減。</div></div>
+          <div class="strategy-card" data-causes="information structure"><div class="number">②</div><h4>リスク引受 + 災害BCP</h4><p>不適正処理リスクと災害時の処理継続を契約価値として売る。</p><div class="strategy-meta">リターン: 損害回避、事業継続性確保。</div></div>
+          <div class="strategy-card" data-causes="structure incentive"><div class="number">③</div><h4>資源循環 + バイオミミクリー</h4><p>自然の循環速度をKPIに入れ、再資源化と上流設計支援を接続する。</p><div class="strategy-meta">リターン: 原材料費削減、循環型企業としてのPR価値。</div></div>
+          <div class="strategy-card" data-causes="information structure"><div class="number">④</div><h4>データ基盤 + 生態系モニタリング</h4><p>処理実績と周辺環境データを統合し、透明性そのものを競争力に変える。</p><div class="strategy-meta">リターン: 管理工数削減、処理コスト最適化。</div></div>
+          <div class="strategy-card" data-causes="time"><div class="number">⑤</div><h4>ネイチャーポジティブ戦略</h4><p>負荷低減を超えて、処分場跡地のビオトープ化など自然回復を成果に含める。</p><div class="strategy-meta">リターン: 自然関連評価軸での差別化。</div></div>
+          <div class="strategy-card" data-causes="structure"><div class="number">⑥</div><h4>レジリエンス戦略</h4><p>災害廃棄物対応力を事業の中心に置き、通常時の処理能力と一体で売る。</p><div class="strategy-meta">リターン: 地域との共生、供給網の安定。</div></div>
+          <div class="strategy-card" data-causes="information structure incentive time"><div class="number">⑦</div><h4>宇宙廃棄物管理</h4><p>捨てる場所がない完全閉鎖系での廃棄物管理を、地球上の理想形のプロトタイプとして捉える。</p><div class="strategy-meta">リターン: 完全循環技術への知見蓄積。</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><h3>見積書の投資概念化</h3><span>付加価値の項目化</span></div>
+          <table class="dense-table">
+            <thead><tr><th>見積項目</th><th>排出者にとっての意味</th></tr></thead>
+            <tbody>
+              <tr><td>収集運搬費 / 処分費</td><td>純粋なコスト</td></tr>
+              <tr><td>ESGデータ提供料</td><td>ESG評価向上への投資</td></tr>
+              <tr><td>コンプライアンス保証料</td><td>リスクヘッジへの投資</td></tr>
+              <tr><td>資源循環設計料</td><td>原材料費削減への投資</td></tr>
+              <tr><td>データ分析料</td><td>管理効率化への投資</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><h3>介入マップの読み方</h3><span>外部4層は何に効くか</span></div>
+          <ul class="strategy-list">
+            <li>技術層: IoTやAIで情報要因を直接緩和する。</li>
+            <li>金融資本層: カーボンプライシングやESG融資でインセンティブを反転させる。</li>
+            <li>社会文化層: NIMBY緩和と信頼形成で構造要因を弱める。</li>
+            <li>国際層: 情報・構造・インセンティブの3要因へ同時作用する。</li>
+          </ul>
+          <div class="callout" style="margin-top: 12px;"><strong>重要な洞察</strong><p>戦略は営業トークではなく、外部レイヤーの力を自社に接続して、内側3層だけでは解けないパラドックスへ介入する設計です。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="conclusion" class="section">
+      <div class="card">
+        <div class="card-title"><h3>5つのキーメッセージ</h3><span>まとめ</span></div>
+        <div class="message-grid">
+          <div class="message-card"><h4>構造で見る</h4><p>出来事を点ではなく3圏10層で配置する。</p></div>
+          <div class="message-card"><h4>時間で見る</h4><p>人間、生態系、地球の時計を並べる。</p></div>
+          <div class="message-card"><h4>声なき者を入れる</h4><p>人間以外の生物を利害関係者として扱う。</p></div>
+          <div class="message-card"><h4>ループを断つ</h4><p>構造・情報・インセンティブ・時間の4要因へ複合介入する。</p></div>
+          <div class="message-card"><h4>仮説で動く</h4><p>構造分析 → 仮説 → 検証の循環を止めない。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>明日から使う問い</h3><span>実践のためのチェックリスト</span></div>
+        <div class="question-grid">
+          <div class="question-card"><h4>ニュース</h4><p>これは10層のどの変化か。</p></div>
+          <div class="question-card"><h4>施設周辺</h4><p>この出力はどの生物圏へ還流するか。</p></div>
+          <div class="question-card"><h4>見積</h4><p>このコストは投資に翻訳できないか。</p></div>
+          <div class="question-card"><h4>長期視点</h4><p>100年後の地球にとってこの判断は妥当か。</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><h3>構造を変え得る4つの力</h3><span>序章の問いに戻る</span></div>
+        <div class="grid-4">
+          <div class="mini-card"><h4>AI</h4><p>数百年〜数億年スケールの構造分析を補助し得るか。</p></div>
+          <div class="mini-card"><h4>量子コンピュータ</h4><p>自然界にない物質への解を分子レベルから探索できるか。</p></div>
+          <div class="mini-card"><h4>宇宙開発</h4><p>地球が閉鎖系であるという前提を変えるのか、それとも問題を拡張するだけか。</p></div>
+          <div class="mini-card"><h4>経済構造変化</h4><p>四半期決算、外部不経済、成長前提という駆動原理そのものを変え得るか。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><h3>出典・引用一覧</h3><span>原稿末尾の参照一覧を反映</span></div>
+        <div class="grid-2">
+          <div class="mini-card" id="source-1">
+            <h4>学術論文</h4>
+            <ul class="bullet-list">
+              <li>[1] Wilcox, C. et al. (2015) "Threat of plastic pollution to seabirds is global, pervasive, and increasing." PNAS, 112(38), 11899-11904. doi:10.1073/pnas.1502108112</li>
+              <li id="source-2">[2] Lamb, J.B. et al. (2018) "Plastic waste associated with disease on coral reefs." Science, 359(6374), 460-462. doi:10.1126/science.aar3320</li>
+              <li id="source-3">[3] Geyer, R. et al. (2017) "Production, use, and fate of all plastics ever made." Science Advances, 3(7), e1700782. doi:10.1126/sciadv.1700782</li>
+              <li id="source-4">[4] Nelsen, M.P. et al. (2016) "Delayed fungal evolution did not cause the Paleozoic peak in coal production." PNAS, 113(9), 2442-2447. doi:10.1073/pnas.1517943113</li>
+            </ul>
+          </div>
+          <div class="mini-card" id="source-5">
+            <h4>国際機関・枠組み</h4>
+            <ul class="bullet-list">
+              <li>[5] IPCC (2021) 第6次評価報告書（AR6）第1作業部会報告書</li>
+              <li id="source-6">[6] TNFD (2023) 自然関連財務情報開示タスクフォース最終提言 v1.0</li>
+              <li id="source-7">[7] WWF (2019) "No Plastic in Nature: Assessing Plastic Ingestion from Nature to People"</li>
+              <li id="source-8">[8] ストックホルム条約（2001年採択）</li>
+              <li id="source-9">[9] バーゼル条約（1989年採択）</li>
+            </ul>
+          </div>
+          <div class="mini-card" id="source-10">
+            <h4>日本の公的資料</h4>
+            <ul class="bullet-list">
+              <li>[10] 環境省「一般廃棄物の排出及び処理状況等について（令和4年度実績）」</li>
+              <li id="source-11">[11] 公益財団法人 日本産業廃棄物処理振興センター「電子マニフェスト捕捉率・登録件数」</li>
+              <li id="source-12">[12] 国立環境研究所（NIES）「環境試料タイムカプセル」</li>
+              <li id="source-13">[13] 内閣府「大規模噴火時の広域降灰対策について」（2020年）</li>
+              <li id="source-14">[14] 環境省「令和5年度 廃棄物の広域移動対策検討調査」</li>
+            </ul>
+            <div class="source-links">
+              <a class="source-link" href="https://www.env.go.jp/press/press_02960.html" target="_blank" rel="noreferrer">[10] 環境省 一般廃棄物の排出及び処理状況等について</a>
+              <a class="source-link" href="https://www.jwnet.or.jp/jwnet/about/regist/" target="_blank" rel="noreferrer">[11] 日本産業廃棄物処理振興センター 電子マニフェスト捕捉率・登録件数</a>
+              <a class="source-link" href="https://www.nies.go.jp/kokkanken_view/deep/column-20241031.html" target="_blank" rel="noreferrer">[12] 国立環境研究所 環境試料タイムカプセル</a>
+              <a class="source-link" href="https://www.env.go.jp/content/000213540.pdf" target="_blank" rel="noreferrer">[14] 環境省 令和5年度 廃棄物の広域移動対策検討調査 PDF</a>
+            </div>
+          </div>
+          <div class="mini-card" id="source-15">
+            <h4>法令</h4>
+            <ul class="bullet-list">
+              <li>[15] 環境基本法（1993年制定）</li>
+              <li id="source-16">[16] 循環型社会形成推進基本法（2000年制定）</li>
+              <li id="source-17">[17] 廃棄物の処理及び清掃に関する法律（1970年制定）</li>
+              <li id="source-18">[18] 容器包装リサイクル法、家電リサイクル法、建設リサイクル法、食品リサイクル法、自動車リサイクル法、小型家電リサイクル法</li>
+              <li id="source-19">[19] 大気汚染防止法、ダイオキシン類対策特別措置法、土壌汚染対策法</li>
+              <li id="source-20">[20] 労働安全衛生法、道路交通法、消防法、建築基準法、地方自治法</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-panel">
+        <strong>Closing Note</strong>
+        <p>地球は数億年をかけて炭素を地下に蓄え、人間はわずか200年でそれを掘り出した。必要なのは、廃棄物を消したことにする仕組みではなく、構造を理解し、仮説を立て、循環への復帰を設計する力です。</p>
+      </div>
+
+      <div class="footer-note">出典: integrated_3domains_10layers_complete_v21.md / 更新日: 2026年3月29日 / 公開ファイル: integrated-framework-3domains-10layers.html</div>
+    </section>
+  </main>
+</div>
+
+<script>
+  const navItems = Array.from(document.querySelectorAll(".nav-item"));
+  const sections = Array.from(document.querySelectorAll(".section"));
+
+  function activateSection(targetId) {
+    navItems.forEach((item) => {
+      item.classList.toggle("active", item.dataset.target === targetId);
+    });
+    sections.forEach((section) => {
+      section.classList.toggle("active", section.id === targetId);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => activateSection(item.dataset.target));
+  });
+
+  const modeChips = Array.from(document.querySelectorAll(".mode-chip"));
+  const modePanels = Array.from(document.querySelectorAll(".mode-panel"));
+
+  modeChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const mode = chip.dataset.mode;
+      modeChips.forEach((button) => button.classList.toggle("active", button === chip));
+      modePanels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.modePanel === mode);
+      });
+    });
+  });
+
+  const layerFilters = Array.from(document.querySelectorAll("[data-layer-filter]"));
+  const layerCards = Array.from(document.querySelectorAll(".layer-card"));
+
+  layerFilters.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const value = chip.dataset.layerFilter;
+      layerFilters.forEach((button) => button.classList.toggle("active", button === chip));
+      layerCards.forEach((card) => {
+        const visible = value === "all" || card.dataset.domain === value;
+        card.classList.toggle("hidden", !visible);
+      });
+    });
+  });
+
+  const strategyFilters = Array.from(document.querySelectorAll("[data-strategy-filter]"));
+  const strategyCards = Array.from(document.querySelectorAll(".strategy-card"));
+
+  strategyFilters.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const value = chip.dataset.strategyFilter;
+      strategyFilters.forEach((button) => button.classList.toggle("active", button === chip));
+      strategyCards.forEach((card) => {
+        const causes = (card.dataset.causes || "").split(" ");
+        const visible = value === "all" || causes.includes(value);
+        card.classList.toggle("hidden", !visible);
+      });
+    });
+  });
+</script>
+</body>
+</html>
