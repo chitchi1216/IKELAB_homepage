@@ -22,6 +22,14 @@ const privateResources = [
     external: false,
   },
   {
+    label: "Dashboard",
+    title: "3圏10層モデル ダッシュボード",
+    detail: "従来の教材ダッシュボードHTMLを表示",
+    href: "/integrated-framework-3domains-10layers.html",
+    action: "ダッシュボードを開く",
+    external: false,
+  },
+  {
     label: "Material",
     title: "Integrated Framework",
     detail: "3 Domains / 10 Layers の教材リポジトリ",
