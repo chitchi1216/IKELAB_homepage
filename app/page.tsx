@@ -22,6 +22,23 @@ const portalItems = [
 const loginUrl =
   "https://nature-observer-sage.vercel.app/login?callbackUrl=https%3A%2F%2Fnature-observer-sage.vercel.app%2F";
 
+const privateResources = [
+  {
+    label: "Material",
+    title: "Integrated Framework",
+    detail: "3 Domains / 10 Layers の教材リポジトリ",
+    href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers",
+    action: "GitHubで開く",
+  },
+  {
+    label: "Discussion",
+    title: "Framework Discussions",
+    detail: "教材に関する質問、論点、改善案を議論",
+    href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers/discussions",
+    action: "議論を開く",
+  },
+];
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#f6f3ea] text-[#171713]">
@@ -98,7 +115,7 @@ export default function Home() {
               />
             </div>
 
-            <form action={loginUrl} className="space-y-5">
+            <div className="space-y-5">
               <label className="block">
                 <span className="text-sm font-medium text-[#4d473d]">
                   Email
@@ -125,18 +142,61 @@ export default function Home() {
                 />
               </label>
 
-              <button
-                className="h-12 w-full bg-[#171713] px-5 text-sm font-semibold uppercase tracking-[0.18em] text-[#fffdf8] transition hover:bg-[#3a352d]"
-                type="submit"
+              <a
+                className="flex h-12 w-full items-center justify-center bg-[#171713] px-5 text-sm font-semibold uppercase tracking-[0.18em] text-[#fffdf8] transition hover:bg-[#3a352d]"
+                href={loginUrl}
               >
                 Login
-              </button>
-            </form>
+              </a>
+            </div>
 
             <p className="mt-5 text-xs leading-6 text-[#7c7568]">
               現在は観察記録システムのログイン画面へ接続します。議論と教材の
               管理機能はポータル機能として順次追加予定です。
             </p>
+          </div>
+        </section>
+
+        <section className="border-t border-[#d8d0bf] py-6">
+          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
+                Private GitHub
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold">
+                教材と議論スペース
+              </h2>
+            </div>
+            <p className="max-w-md text-xs leading-6 text-[#6f685c]">
+              リポジトリはprivateです。GitHubで権限を持つメンバーだけが
+              教材とDiscussionsを参照できます。
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {privateResources.map((resource) => (
+              <a
+                key={resource.title}
+                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
+                href={resource.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
+                  {resource.label}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold">
+                  {resource.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[#6f685c]">
+                  {resource.detail}
+                </p>
+                <p className="mt-5 text-sm font-semibold text-[#171713]">
+                  {resource.action}
+                  <span className="ml-2 transition group-hover:ml-3">→</span>
+                </p>
+              </a>
+            ))}
           </div>
         </section>
 
