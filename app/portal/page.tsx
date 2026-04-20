@@ -20,15 +20,18 @@ const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const minutesUrl = "/minutes/rg-002.html";
 
-const privateResources = [
+const minutesResources = [
   {
-    label: "Minutes",
+    label: "New Minutes",
     title: "【IKELab】RG#002 議事録",
-    detail: "ログイン後のポータルから参照する議事録HTML",
+    detail: "2026年4月20日にアップロードされた議事録HTML。ポータルから直接参照できます。",
     href: minutesUrl,
     action: "議事録を開く",
     external: false,
   },
+];
+
+const privateResources = [
   {
     label: "Material v21",
     title: "教材 v21を読む",
@@ -156,6 +159,48 @@ export default async function PortalPage() {
             >
               Observation Login
             </a>
+          </div>
+        </section>
+
+        <section className="border-t border-[#d8d0bf] py-6">
+          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
+                Minutes
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold">
+                議事録
+              </h2>
+            </div>
+            <p className="max-w-md text-xs leading-6 text-[#6f685c]">
+              議事録が追加されました。新着の記録はこのカテゴリから参照できます。
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2">
+            {minutesResources.map((resource) => (
+              <a
+                key={resource.title}
+                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
+                href={resource.href}
+                target={resource.external ? "_blank" : undefined}
+                rel={resource.external ? "noreferrer" : undefined}
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
+                  {resource.label}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold">
+                  {resource.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-[#6f685c]">
+                  {resource.detail}
+                </p>
+                <p className="mt-5 text-sm font-semibold text-[#171713]">
+                  {resource.action}
+                  <span className="ml-2 transition group-hover:ml-3">→</span>
+                </p>
+              </a>
+            ))}
           </div>
         </section>
 
