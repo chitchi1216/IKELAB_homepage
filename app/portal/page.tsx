@@ -23,8 +23,9 @@ const minutesUrl = "/minutes/rg-002.html";
 const minutesResources = [
   {
     label: "New Minutes",
+    date: "2026.04.20",
     title: "【IKELab】RG#002 議事録",
-    detail: "2026年4月20日にアップロードされた議事録HTML。ポータルから直接参照できます。",
+    detail: "社内支援、次回外出、3圏10層教材についての記録をアップロードしました。",
     href: minutesUrl,
     action: "議事録を開く",
     external: false,
@@ -177,28 +178,38 @@ export default async function PortalPage() {
             </p>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="space-y-3">
             {minutesResources.map((resource) => (
               <a
                 key={resource.title}
-                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
+                className="group block border border-[#b8d2c4] border-l-4 border-l-[#21684d] bg-[#f4fbf6] p-5 transition hover:border-[#21684d] hover:bg-[#eef7ee] sm:p-6"
                 href={resource.href}
                 target={resource.external ? "_blank" : undefined}
                 rel={resource.external ? "noreferrer" : undefined}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
-                  {resource.label}
-                </p>
-                <h3 className="mt-3 text-xl font-semibold">
-                  {resource.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-[#6f685c]">
-                  {resource.detail}
-                </p>
-                <p className="mt-5 text-sm font-semibold text-[#171713]">
-                  {resource.action}
-                  <span className="ml-2 transition group-hover:ml-3">→</span>
-                </p>
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="bg-[#21684d] px-2 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+                        {resource.label}
+                      </span>
+                      <span className="text-sm font-semibold text-[#21684d]">
+                        {resource.date}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-2xl font-semibold leading-tight">
+                      {resource.title}
+                    </h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-[#4f6659]">
+                      {resource.detail}
+                    </p>
+                  </div>
+
+                  <p className="flex h-12 shrink-0 items-center justify-center border border-[#21684d] bg-[#21684d] px-5 text-sm font-semibold text-white transition group-hover:bg-[#174936] sm:min-w-36">
+                    {resource.action}
+                    <span className="ml-2 transition group-hover:ml-3">→</span>
+                  </p>
+                </div>
               </a>
             ))}
           </div>
