@@ -18,7 +18,17 @@ const terraHubV14Url = "/external/terra-hub-v1-4";
 
 const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
+const minutesUrl = "/minutes/rg-002.html";
+
 const privateResources = [
+  {
+    label: "Minutes",
+    title: "【IKELab】RG#002 議事録",
+    detail: "ログイン後のポータルから参照する議事録HTML",
+    href: minutesUrl,
+    action: "議事録を開く",
+    external: false,
+  },
   {
     label: "Material v21",
     title: "教材 v21を読む",

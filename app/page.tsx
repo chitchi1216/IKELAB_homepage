@@ -40,21 +40,6 @@ export default function Home() {
               パスワードを入力してポータルに進んでください。
             </p>
 
-            <div className="mb-6 border border-[#d8d0bf] bg-[#f8f5ed] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
-                Minutes
-              </p>
-              <a
-                className="mt-2 inline-flex text-sm font-semibold text-[#171713] underline-offset-4 transition hover:underline"
-                href="/minutes/rg-002.html"
-              >
-                【IKELab】RG#002 議事録を参照
-              </a>
-              <p className="mt-1 text-xs leading-6 text-[#6f685c]">
-                `docx` から変換したHTML版を公開しています。
-              </p>
-            </div>
-
             <form action="/api/login" className="space-y-5" method="post">
               <label className="block">
                 <span className="text-sm font-medium text-[#4d473d]">
