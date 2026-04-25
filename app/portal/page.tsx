@@ -1,6 +1,9 @@
 import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import iconBlackRounded from "../../log-cc/icon/ikelab2026_icon_black_rounded_M.png";
+import wordmarkBlack from "../../log-cc/wordmark/ikelab2026_black_M.png";
+import wordmarkBlackSmall from "../../log-cc/wordmark/ikelab2026_black_XS.png";
 import { SESSION_COOKIE_NAME, isValidSession } from "../../lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -20,69 +23,122 @@ const frameworkOverviewUrl = "/materials/integrated-framework/latest";
 
 const minutesUrl = "/minutes/rg-002.html";
 
-const minutesResources = [
+const xUrl = "https://x.com/IKELAB2026";
+
+const instagramUrl = "https://www.instagram.com/ikelab2026/";
+
+const frameworkRepoUrl =
+  "https://github.com/chitchi1216/integrated-framework-3domains-10layers";
+
+const frameworkDiscussionsUrl =
+  "https://github.com/chitchi1216/integrated-framework-3domains-10layers/discussions";
+
+const homepageRepoUrl = "https://github.com/chitchi1216/HomePage-ike.maniken";
+
+const terraHubRepoUrl = "https://github.com/chitchi1216/terra-hub";
+
+type LinkItem = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+const navItems = [
+  { label: "更新", href: "#updates" },
+  { label: "議事録", href: "#minutes" },
+  { label: "教材", href: "#materials" },
+  { label: "プロジェクト", href: "#projects" },
+];
+
+const updateFeed = [
   {
-    label: "New Minutes",
     date: "2026.04.20",
+    category: "議事録追加",
     title: "【IKELab】RG#002 議事録",
-    detail: "社内支援、次回外出、3圏10層教材についての記録をアップロードしました。",
+    detail:
+      "社内支援、次回外出、3圏10層教材についての記録をアップロードしました。",
     href: minutesUrl,
-    action: "議事録を開く",
-    external: false,
-  },
-];
-
-const privateResources = [
-  {
-    label: "Material v21",
-    title: "教材 v21を読む",
-    detail: "docxから生成した図入りHTMLをポータル上で閲覧",
-    href: frameworkOverviewUrl,
-    action: "教材ページを開く",
-    external: false,
   },
   {
-    label: "Dashboard",
-    title: "3圏10層モデル ダッシュボード",
-    detail: "従来の教材ダッシュボードHTMLを表示",
-    href: "/integrated-framework-3domains-10layers.html",
-    action: "ダッシュボードを開く",
-    external: false,
-  },
-  {
-    label: "Material",
-    title: "Integrated Framework",
-    detail: "3 Domains / 10 Layers の教材リポジトリ",
-    href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers",
-    action: "GitHubで開く",
-    external: true,
-  },
-  {
-    label: "Discussion",
-    title: "Framework Discussions",
-    detail: "教材に関する質問、論点、改善案を議論",
-    href: "https://github.com/chitchi1216/integrated-framework-3domains-10layers/discussions",
-    action: "議論を開く",
-    external: true,
-  },
-];
-
-const externalPages = [
-  {
-    label: "ExternalPage",
-    title: "資源と人を未来につなぐためのデータマッシュアップ構想",
-    detail: "外部公開ページ",
-    href: homepageUrl,
-    action: "ページを開く",
-  },
-  {
-    label: "ExternalPage",
-    title: "社内実験用データ統合基盤構想 v1.4",
-    detail: "分散する業務データをCSV起点で統合・可視化する社内実験基盤の企画案",
+    date: "2026.04.19",
+    category: "プロジェクト追加",
+    title: "社内実験用データ統合基盤企画書たたき台_v1.4",
+    detail: "CSV起点で業務データを統合・可視化する実験基盤の企画案です。",
     href: terraHubV14Url,
-    action: "企画書を開く",
+  },
+  {
+    date: "2026.04.18",
+    category: "教材追加",
+    title: "3圏10層モデル",
+    detail: "テキスト、ダッシュボード、GitHubリポジトリへの導線を追加しました。",
+    href: frameworkOverviewUrl,
   },
 ];
+
+const quickLinks: LinkItem[] = [
+  { label: "観察記録システム", href: observationUrl, external: true },
+  { label: "教材トップ", href: "#materials" },
+  { label: "議事録一覧", href: minutesUrl },
+];
+
+const materialGroups = [
+  {
+    title: "3圏10層モデル",
+    links: [
+      { label: "テキスト", href: frameworkOverviewUrl },
+      { label: "ダッシュボード", href: "/integrated-framework-3domains-10layers.html" },
+    ],
+  },
+  {
+    title: "論考アーカイブ",
+    links: [
+      {
+        label: "実在と実存の架橋は時間を超えた対話 改訂版",
+        href: existenceDialogueUrl,
+      },
+    ],
+  },
+  {
+    title: "GitHub",
+    links: [
+      { label: "リポジトリ", href: frameworkRepoUrl, external: true },
+      { label: "ディスカッション", href: frameworkDiscussionsUrl, external: true },
+    ],
+  },
+];
+
+const projects = [
+  {
+    title: "マッシュアップ構想",
+    detail: "資源と人を未来につなぐためのデータマッシュアップ構想。",
+    links: [
+      { label: "資料を開く", href: homepageUrl, external: true },
+      { label: "リポジトリ", href: homepageRepoUrl, external: true },
+    ],
+  },
+  {
+    title: "社内実験用データ統合基盤企画書たたき台_v1.4",
+    detail: "分散する業務データをCSV起点で統合・可視化する社内実験基盤の企画案。",
+    links: [
+      { label: "企画書を開く", href: terraHubV14Url },
+      { label: "リポジトリ", href: terraHubRepoUrl, external: true },
+    ],
+  },
+];
+
+function linkTarget(link: LinkItem) {
+  return link.external
+    ? { target: "_blank", rel: "noreferrer" }
+    : {};
+}
+
+function Arrow() {
+  return (
+    <span aria-hidden="true" className="shrink-0 whitespace-nowrap">
+      →
+    </span>
+  );
+}
 
 export default async function PortalPage() {
   const cookieStore = await cookies();
@@ -94,223 +150,330 @@ export default async function PortalPage() {
 
   return (
     <main className="min-h-screen bg-[#f6f3ea] text-[#171713]">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-6 sm:px-8">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/ikelab-icon.png"
-              alt=""
-              width={34}
-              height={34}
-              priority
-            />
-            <Image
-              src="/ikelab-wordmark.png"
-              alt="IKELAB 2026"
-              width={260}
-              height={77}
-              className="h-auto w-36 sm:w-48"
-              priority
-            />
-          </div>
-          <form action="/api/logout" method="post">
-            <button
-              className="border border-[#d9d1c2] bg-[#fffdf8] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#676052] transition hover:border-[#171713]"
-              type="submit"
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8">
+        <header className="border-b border-[#d8d0bf] pb-4">
+          <div className="flex flex-wrap items-center gap-4 lg:flex-nowrap">
+            <a
+              aria-label="IKELAB2026 Portal"
+              className="flex min-w-0 items-center gap-3"
+              href="/portal"
             >
-              Logout
-            </button>
-          </form>
+              <Image
+                alt=""
+                className="h-9 w-9 shrink-0"
+                priority
+                src={iconBlackRounded}
+              />
+              <Image
+                alt="IKELAB2026"
+                className="h-auto w-[136px] shrink-0 sm:w-[156px]"
+                priority
+                src={wordmarkBlack}
+              />
+            </a>
+
+            <nav
+              aria-label="Portal navigation"
+              className="order-3 -mx-1 flex w-full gap-1 overflow-x-auto lg:order-none lg:mx-4 lg:w-auto lg:flex-1 lg:justify-center lg:overflow-visible"
+            >
+              {navItems.map((item) => (
+                <a
+                  className="shrink-0 px-3 py-2 text-sm font-semibold text-[#676052] transition hover:bg-[#fffdf8] hover:text-[#171713]"
+                  href={item.href}
+                  key={item.href}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+
+            <form action="/api/logout" className="ml-auto" method="post">
+              <button
+                className="h-10 border border-[#d9d1c2] bg-[#fffdf8] px-4 text-sm font-semibold text-[#676052] transition hover:border-[#171713] hover:text-[#171713]"
+                type="submit"
+              >
+                Logout
+              </button>
+            </form>
+          </div>
         </header>
 
-        <section className="grid flex-1 items-center gap-12 py-14 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="max-w-xl space-y-8">
-            <div className="space-y-5">
-              <h1 className="text-4xl font-semibold leading-tight tracking-normal sm:text-6xl">
-                IKELAB2026 Portal
-              </h1>
-            </div>
-          </div>
+        <section className="py-8 sm:py-10">
+          <p className="text-sm font-semibold text-[#777063]">
+            Member research workspace
+          </p>
+          <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-6xl">
+            IKELAB2026 Portal
+          </h1>
+        </section>
 
-          <div className="mx-auto w-full max-w-md border border-[#d8d0bf] bg-[#fffdf8] p-6 shadow-[12px_12px_0_#e4dece] sm:p-8">
-            <div className="mb-8 flex items-start justify-between gap-6">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <section
+            aria-labelledby="updates-heading"
+            className="min-w-0"
+            id="updates"
+          >
+            <div className="mb-4 flex flex-col gap-3 border-b border-[#d8d0bf] pb-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#777063]">
-                  Observation
+                <p className="text-sm font-semibold text-[#21684d]">
+                  Updates
                 </p>
-                <h2 className="mt-3 text-2xl font-semibold">
-                  観察記録システム
+                <h2
+                  className="mt-1 text-2xl font-semibold"
+                  id="updates-heading"
+                >
+                  更新フィード
                 </h2>
               </div>
-              <Image
-                src="/ikelab-icon.png"
-                alt=""
-                width={48}
-                height={48}
-              />
+              <div className="flex gap-2 overflow-x-auto">
+                {["All", "Minutes", "Materials", "Projects"].map((filter) => (
+                  <span
+                    className="shrink-0 border border-[#d8d0bf] bg-[#fffdf8] px-3 py-1.5 text-xs font-semibold text-[#676052]"
+                    key={filter}
+                  >
+                    {filter}
+                  </span>
+                ))}
+              </div>
             </div>
 
-            <p className="text-sm leading-7 text-[#6f685c]">
-              旅先や日常で出会った生物の記録は、既存の観察記録システムに
-              蓄積します。
-            </p>
-            <a
-              className="mt-6 flex h-12 w-full items-center justify-center bg-[#171713] px-5 text-sm font-semibold uppercase tracking-[0.18em] text-[#fffdf8] transition hover:bg-[#3a352d]"
-              href={observationUrl}
-            >
-              Observation Login
-            </a>
-          </div>
-        </section>
+            <div className="space-y-3">
+              {updateFeed.map((item) => (
+                <a
+                  className="group block border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713] hover:bg-white sm:p-6"
+                  href={item.href}
+                  key={item.title}
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="bg-[#21684d] px-2 py-1 text-xs font-semibold text-white">
+                          {item.category}
+                        </span>
+                        <time className="text-sm font-semibold text-[#21684d]">
+                          {item.date}
+                        </time>
+                      </div>
+                      <h3 className="mt-4 text-2xl font-semibold leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f685c]">
+                        {item.detail}
+                      </p>
+                    </div>
+                    <span className="inline-flex h-10 shrink-0 items-center gap-2 text-sm font-semibold text-[#171713] transition group-hover:translate-x-1">
+                      開く
+                      <Arrow />
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
 
-        <section className="border-t border-[#d8d0bf] py-6">
-          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
+          <aside className="space-y-4 lg:sticky lg:top-5 lg:self-start">
+            <section className="border border-[#d8d0bf] bg-[#fffdf8] p-5">
+              <p className="text-sm font-semibold text-[#777063]">
+                Quick Access
+              </p>
+              <div className="mt-4 space-y-2">
+                {quickLinks.map((link, index) => (
+                  <a
+                    className={[
+                      "flex min-h-11 items-center justify-between gap-3 border px-3 py-2 text-sm font-semibold transition",
+                      index === 0
+                        ? "border-[#171713] bg-[#171713] text-[#fffdf8] hover:bg-[#3a352d]"
+                        : "border-[#d8d0bf] bg-[#f8f5ed] text-[#171713] hover:border-[#171713] hover:bg-white",
+                    ].join(" ")}
+                    href={link.href}
+                    key={link.label}
+                    {...linkTarget(link)}
+                  >
+                    <span>{link.label}</span>
+                    <Arrow />
+                  </a>
+                ))}
+              </div>
+              <p className="mt-4 text-xs leading-6 text-[#6f685c]">
+                観察記録システムは別サイトPWAへ移動します。
+              </p>
+            </section>
+
+            <section
+              aria-labelledby="minutes-heading"
+              className="border border-[#d8d0bf] bg-[#fffdf8] p-5"
+              id="minutes"
+            >
+              <p className="text-sm font-semibold text-[#777063]">
                 Minutes
               </p>
-              <h2 className="mt-2 text-2xl font-semibold">
+              <h2
+                className="mt-1 text-xl font-semibold"
+                id="minutes-heading"
+              >
                 議事録
               </h2>
-            </div>
-            <p className="max-w-md text-xs leading-6 text-[#6f685c]">
-              議事録が追加されました。新着の記録はこのカテゴリから参照できます。
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {minutesResources.map((resource) => (
-              <a
-                key={resource.title}
-                className="group block border border-[#b8d2c4] border-l-4 border-l-[#21684d] bg-[#f4fbf6] p-5 transition hover:border-[#21684d] hover:bg-[#eef7ee] sm:p-6"
-                href={resource.href}
-                target={resource.external ? "_blank" : undefined}
-                rel={resource.external ? "noreferrer" : undefined}
-              >
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="bg-[#21684d] px-2 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
-                        {resource.label}
-                      </span>
-                      <span className="text-sm font-semibold text-[#21684d]">
-                        {resource.date}
-                      </span>
-                    </div>
-                    <h3 className="mt-4 text-2xl font-semibold leading-tight">
-                      {resource.title}
-                    </h3>
-                    <p className="mt-3 max-w-2xl text-sm leading-7 text-[#4f6659]">
-                      {resource.detail}
-                    </p>
-                  </div>
-
-                  <p className="flex h-12 shrink-0 items-center justify-center border border-[#21684d] bg-[#21684d] px-5 text-sm font-semibold text-white transition group-hover:bg-[#174936] sm:min-w-36">
-                    {resource.action}
-                    <span className="ml-2 transition group-hover:ml-3">→</span>
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-t border-[#d8d0bf] py-6">
-          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
-                Private GitHub
+              <p className="mt-3 text-sm leading-7 text-[#6f685c]">
+                本サークルの議事録を日付順に確認できます。
               </p>
-              <h2 className="mt-2 text-2xl font-semibold">
-                教材と議論スペース
+              <a
+                className="mt-4 flex min-h-11 items-center justify-between gap-3 border border-[#d8d0bf] bg-[#f8f5ed] px-3 py-2 text-sm font-semibold transition hover:border-[#171713] hover:bg-white"
+                href={minutesUrl}
+              >
+                <span>議事録一覧</span>
+                <Arrow />
+              </a>
+            </section>
+
+            <section
+              aria-labelledby="materials-heading"
+              className="border border-[#d8d0bf] bg-[#fffdf8] p-5"
+              id="materials"
+            >
+              <p className="text-sm font-semibold text-[#777063]">
+                Materials
+              </p>
+              <h2
+                className="mt-1 text-xl font-semibold"
+                id="materials-heading"
+              >
+                教材
+              </h2>
+              <div className="mt-5 space-y-5">
+                {materialGroups.map((group) => (
+                  <div key={group.title}>
+                    <h3 className="border-b border-[#d8d0bf] pb-2 text-sm font-semibold">
+                      {group.title}
+                    </h3>
+                    <div className="mt-2 space-y-1">
+                      {group.links.map((link) => (
+                        <a
+                          className="flex min-h-10 items-center justify-between gap-3 px-1 py-2 text-sm font-semibold text-[#676052] transition hover:text-[#171713]"
+                          href={link.href}
+                          key={link.label}
+                          {...linkTarget(link)}
+                        >
+                          <span className="min-w-0 break-words">
+                            {link.label}
+                          </span>
+                          <Arrow />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <section
+          aria-labelledby="projects-heading"
+          className="mt-8 border-t border-[#d8d0bf] pt-6"
+          id="projects"
+        >
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[#777063]">
+                Projects
+              </p>
+              <h2
+                className="mt-1 text-2xl font-semibold"
+                id="projects-heading"
+              >
+                プロジェクト
               </h2>
             </div>
-            <p className="max-w-md text-xs leading-6 text-[#6f685c]">
-              リポジトリはprivateです。GitHubで権限を持つメンバーだけが
-              教材とDiscussionsを参照できます。
+            <p className="max-w-lg text-sm leading-7 text-[#6f685c]">
+              プロジェクトは増減します。各カードから資料とリポジトリへ移動できます。
             </p>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2">
-            {privateResources.map((resource) => (
-              <a
-                key={resource.title}
-                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
-                href={resource.href}
-                target={resource.external ? "_blank" : undefined}
-                rel={resource.external ? "noreferrer" : undefined}
+          <div className="grid gap-3 lg:grid-cols-2">
+            {projects.map((project) => (
+              <article
+                className="border border-[#d8d0bf] bg-[#fffdf8] p-5 sm:p-6"
+                key={project.title}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
-                  {resource.label}
-                </p>
-                <h3 className="mt-3 text-xl font-semibold">
-                  {resource.title}
+                <h3 className="text-xl font-semibold leading-snug">
+                  {project.title}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-[#6f685c]">
-                  {resource.detail}
+                  {project.detail}
                 </p>
-                <p className="mt-5 text-sm font-semibold text-[#171713]">
-                  {resource.action}
-                  <span className="ml-2 transition group-hover:ml-3">→</span>
-                </p>
-              </a>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {project.links.map((link) => (
+                    <a
+                      className="inline-flex min-h-10 items-center gap-2 border border-[#d8d0bf] bg-[#f8f5ed] px-3 py-2 text-sm font-semibold transition hover:border-[#171713] hover:bg-white"
+                      href={link.href}
+                      key={link.label}
+                      {...linkTarget(link)}
+                    >
+                      {link.label}
+                      <Arrow />
+                    </a>
+                  ))}
+                </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section className="border-t border-[#d8d0bf] py-6">
-          <div className="mb-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#676052]">
-              ExternalPage
-            </p>
-          </div>
+        <footer className="mt-10 border-t border-[#d8d0bf] py-6">
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div>
+              <Image
+                alt="IKELAB2026"
+                className="h-auto w-[128px]"
+                src={wordmarkBlackSmall}
+              />
+              <p className="mt-3 text-xs leading-6 text-[#6f685c]">
+                Member research workspace
+              </p>
+            </div>
 
-          <div className="grid gap-3 md:grid-cols-2">
-            {externalPages.map((page) => (
-              <a
-                key={page.title}
-                className="group border border-[#d8d0bf] bg-[#fffdf8] p-5 transition hover:border-[#171713]"
-                href={page.href}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#777063]">
-                  {page.label}
-                </p>
-                <h3 className="mt-3 text-xl font-semibold leading-8">
-                  {page.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-[#6f685c]">
-                  {page.detail}
-                </p>
-                <p className="mt-5 text-sm font-semibold text-[#171713]">
-                  {page.action}
-                  <span className="ml-2 transition group-hover:ml-3">→</span>
-                </p>
-              </a>
-            ))}
-          </div>
-        </section>
+            <div>
+              <p className="text-sm font-semibold text-[#777063]">
+                Official
+              </p>
+              <div className="mt-3 space-y-2">
+                <a
+                  className="flex min-h-9 items-center justify-between gap-3 text-sm font-semibold text-[#676052] transition hover:text-[#171713]"
+                  href={xUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <span>X / IKELAB2026</span>
+                  <Arrow />
+                </a>
+                <a
+                  className="flex min-h-9 items-center justify-between gap-3 text-sm font-semibold text-[#676052] transition hover:text-[#171713]"
+                  href={instagramUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <span>Instagram / ikelab2026</span>
+                  <Arrow />
+                </a>
+              </div>
+            </div>
 
-        <footer className="border-t border-[#d8d0bf] py-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a8172]">
-            Archive
-          </p>
-          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-            <a
-              className="inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
-              href={legacyHomepageUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              旧IKELABページ
-            </a>
-            <a
-              className="inline-flex text-sm font-semibold text-[#676052] underline-offset-4 transition hover:text-[#171713] hover:underline"
-              href={existenceDialogueUrl}
-            >
-              実在と実存の架橋は時間を超えた対話 改訂版
-            </a>
+            <div>
+              <p className="text-sm font-semibold text-[#777063]">
+                Archive
+              </p>
+              <div className="mt-3 space-y-2">
+                <a
+                  className="flex min-h-9 items-center justify-between gap-3 text-sm font-semibold text-[#676052] transition hover:text-[#171713]"
+                  href={legacyHomepageUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <span>旧ホームページ</span>
+                  <Arrow />
+                </a>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
