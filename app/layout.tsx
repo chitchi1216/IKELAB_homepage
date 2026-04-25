@@ -5,7 +5,12 @@ export const metadata: Metadata = {
   title: "IKELAB Portal",
   description: "IKELAB research circle member portal.",
   icons: {
-    icon: "/icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "1024x1024" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/icon.png", type: "image/png", sizes: "1024x1024" }],
   },
 };
 
